@@ -49,7 +49,7 @@ body {
  .wrapper select {
   display: block;
  }
- /* .button {
+ .button {
   margin: 10px 2px;
   padding: 5px 20px;
   border-radius: 8px;
@@ -59,11 +59,17 @@ body {
   text-align: center;
   display: inline-block;
   font-size: small;
- } */
- /* .button:hover {
+ } 
+ .button:hover {
   cursor: pointer;
   opacity: 0.75;
- } */
+ }
+ button:disabled,
+button[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
  .wrapper hr {
   margin: 40px auto;
  }
