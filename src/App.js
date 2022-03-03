@@ -9,27 +9,28 @@ function App() {
   const [disableVisNow, setDisable] = React.useState(false);
   const [show, setShow] = useState(false);
 
-  // function fetchRates() {
-  //   fetch(`${SERVER_URL}/algorithms`)
-  //   .then(response => response.json())
-  //   .then(data => {
-  //     console.log(data)                     
-  //   });
-  //  }
-  //  fetchRates();
-  //  useEffect(fetchRates, []);
+  function getNote() {
+    fetch(`${SERVER_URL}/getnote`)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)                     
+    });
+   }
+  //  getNote();
+  //  useEffect(getNote, []);
 
    function checkKeyChanged(e){
      if(!disableVisNow)
      if(e.code === 'Space' || e.code === 'Enter') {
        console.log(Notes);
-    // postData(`${SERVER_URL}/dave`, {Notes: Notes});
+    postData(`${SERVER_URL}/Addnote`, {text: Notes});
      }
 
    }
    function visualizeNow() {
     console.log(Notes);
-// postData(`${SERVER_URL}/dave`, {Notes: Notes});
+    postData(`${SERVER_URL}/Addnote`, {text: Notes});
+    getNote();
    }
    function visualizeNowModefunction() {
     console.log("at the end");
