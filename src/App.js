@@ -16,8 +16,8 @@ function App() {
       console.log(data)                     
     });
    }
-  //  getNote();
-  //  useEffect(getNote, []);
+  // getNote();
+  // useEffect(getNote, []);
 
    function checkKeyChanged(e){
      if(!disableVisNow)
@@ -30,8 +30,18 @@ function App() {
    function visualizeNow() {
     console.log(Notes);
     postData(`${SERVER_URL}/Addnote`, {text: Notes});
-    getNote();
+    
    }
+
+   function FromEPIC() {
+    fetch(`${SERVER_URL}/getnoteepic`)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data) 
+    
+   });
+  }
+
    function visualizeNowModefunction() {
     console.log("at the end");
     setShow(prev => !prev)
@@ -39,10 +49,13 @@ function App() {
     // setVisualizeNowMode(true);
 
   }
+  
    function visualizeContinouslyModefunction() {
     console.log("dynamic");
     setDisable(false)
    }
+
+
 
 async function postData(url='',data={}){
   const response = await fetch(url, {
@@ -71,6 +84,7 @@ return response.json();
                 value={Notes} onChange={e =>setNotes(e.target.value)} onKeyPress={(e) => checkKeyChanged(e)}>
   </textarea>
   <button id="visualize-button" disabled={!disableVisNow} className="button" type="button" onClick={visualizeNow}>Visualize Now</button>
+  <button id="visualize-button" className="button" type="button" onClick={FromEPIC}>From EPIC</button>
                </div>
         </div>
     </div>
