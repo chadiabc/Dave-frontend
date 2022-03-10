@@ -76,7 +76,7 @@ button[disabled]{
 
  @media only screen and (min-width: 1400px) {
   .wrapper {
-  width: 40%;
+  width: 85%;
   }
   .wrapper input {
   width: 600px;
@@ -84,19 +84,19 @@ button[disabled]{
  }
  @media only screen and (max-width: 1399px) and (min-width: 750px) {
   .wrapper {
-  width: 40%;
+  width: 85%;
   }
   .wrapper input {
   width: 400px;
   }
  }
 
- .vertical {
+ /* .vertical {
   border-left: 1px solid black;
   height: 100%;
   position:absolute;
   left: 50%;
-}
+} */
 
 /* Split the screen in half */
 .split {
@@ -119,7 +119,7 @@ button[disabled]{
 .right {
   right: 0;
   background-color: red;
-  z-index: 14;
+  z-index: 1;
 }
 
 /* If you want the content centered horizontally and vertically */
@@ -129,4 +129,31 @@ button[disabled]{
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
+}
+
+.epic {
+  background-color: purple;
+}
+
+.graphBox {
+  display: flex;
+}
+
+.graphBoxLeft {
+  flex: 40%;
+}
+
+.graphBoxRight{
+  flex: 60%;
+  /* background-color: plum; */
+}
+
+.cyto {
+  background-color: #cddaff;;
+  top :99px;
+  bottom: 0px;
+  position:absolute;
+  border-left: 1px solid #111;
+  width: 60%;
+  /* height: 60%; */
 }
