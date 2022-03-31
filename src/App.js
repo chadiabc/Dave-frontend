@@ -88,8 +88,13 @@ function App() {
     if (!disableVisNow)
       if (e.code === 'Space' || e.code === 'Enter') {
         console.log(Notes);
-        postData(`${SERVER_URL}/Addnote`, { text: Notes });
-        getgraph();
+        postData(`${SERVER_URL}/Addnote`, { text: Notes })
+     
+        
+
+          
+        
+        // getgraph();
       }
   }
   function visualizeNow() {
@@ -130,8 +135,9 @@ function App() {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
-    });
-    return response.json();
+    })
+    const datar = await response.json();
+    setGraph(datar.elementss);
   }
 
   return (
@@ -158,9 +164,10 @@ function App() {
 
         <div className="graphBoxRight">
           {graph != "null" &&
-            <CytoscapeComponent className="cyto" cy={(cy) => {
+            <CytoscapeComponent autoungrabify={true} className="cyto" cy={(cy) => {
               cy.on("select", (_x) => {
                 console.log("something was selected here");
+                
               });
             }} elements={CytoscapeComponent.normalizeElements(graph)} layout={{
               name: "dagre",

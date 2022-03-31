@@ -61,6 +61,7 @@ const cytoscapeStylesheet = [
 
 class Graphbox extends React.Component {
     constructor(props) {
+      
         super(props);
         this.state = { graph: "graph" };
     }
@@ -88,3 +89,5 @@ class Graphbox extends React.Component {
 }
 
 export default Graphbox;
+
+
