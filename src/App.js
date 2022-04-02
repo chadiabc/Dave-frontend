@@ -126,6 +126,24 @@ function App() {
     setDisable(false)
   }
 
+  function resetData(){
+    reset(`${SERVER_URL}/reset`);
+    console.log("reset")
+  }
+
+  async function reset(url = '') {
+    const response = await fetch(url, {
+
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify("RESET")
+    })
+    const datar = await response.json();
+    setGraph("null");
+  }
+
 
   async function postData(url = '', data = {}) {
     const response = await fetch(url, {
@@ -158,6 +176,7 @@ function App() {
               </textarea>
               <button id="visualize-button" disabled={!disableVisNow} className="button" type="button" onClick={visualizeNow}>Visualize Now</button>
               <button id="visualize-button" className="button epic" type="button" onClick={FromEPIC}>From EPIC</button>
+              <button id="visualize-button" className="button epic" type="button" onClick={resetData}>Reset</button>
             </div>
           </div>
         </div>
