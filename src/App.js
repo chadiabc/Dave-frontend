@@ -128,6 +128,7 @@ function App() {
 
   function resetData(){
     reset(`${SERVER_URL}/reset`);
+    setNotes("");
     console.log("reset")
   }
 
@@ -183,12 +184,8 @@ function App() {
 
         <div className="graphBoxRight">
           {graph != "null" &&
-            <CytoscapeComponent autoungrabify={true} className="cyto" cy={(cy) => {
-              cy.on("select", (_x) => {
-                console.log("something was selected here");
-                
-              });
-            }} elements={CytoscapeComponent.normalizeElements(graph)} layout={{
+            <CytoscapeComponent autoungrabify={true} className="cyto"
+              elements={CytoscapeComponent.normalizeElements(graph)} layout={{
               name: "dagre",
               // other options
               padding: 10,
