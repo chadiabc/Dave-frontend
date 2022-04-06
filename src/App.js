@@ -5,6 +5,7 @@ import CytoscapeComponent from 'react-cytoscapejs';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import Graphbox from "./graphBox";
+import { useRef } from "react";
 
 cytoscape.use(dagre);
 
@@ -69,6 +70,7 @@ function App() {
   const [disableVisNow, setDisable] = React.useState(false);
   const [show, setShow] = useState(false);
   const [graph,setGraph] = useState("null");
+  const cytoRef = useRef(null)
 
   function getgraph() {
     fetch(`${SERVER_URL}/getgraph`)
@@ -177,6 +179,7 @@ function App() {
               </textarea>
               <button id="visualize-button" disabled={!disableVisNow} className="button" type="button" onClick={visualizeNow}>Visualize Now</button>
               <button id="visualize-button" className="button epic" type="button" onClick={FromEPIC}>From EPIC</button>
+              <button id="visualize-button" className="button test" type="button" onClick={() => cytoRef.current.reset()}>Cytofunctionalities</button>
               <button id="visualize-button" className="button epic" type="button" onClick={resetData}>Reset</button>
             </div>
           </div>
@@ -184,7 +187,9 @@ function App() {
 
         <div className="graphBoxRight">
           {graph != "null" &&
-            <CytoscapeComponent autoungrabify={true} className="cyto"
+            <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
+             autoungrabify={true} className="cyto"
+             cy={ref => cytoRef.current = ref}
               elements={CytoscapeComponent.normalizeElements(graph)} layout={{
               name: "dagre",
               // other options

@@ -149,11 +149,16 @@ button[disabled]{
 }
 
 .cyto {
-  background-color: #cddaff;;
+  background-color: #cddaff;
   top :99px;
   bottom: 0px;
   position:absolute;
   border-left: 1px solid #111;
   width: 60%;
   /* height: 60%; */
+}
+
+.test {
+  background-color: greenyellow;
+  color:black;
 }
