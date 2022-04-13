@@ -8,6 +8,7 @@ import Graphbox from "./graphBox";
 import { useRef } from "react";
 import { expandCollapse,expandCollapseUtilities} from 'cytoscape-expand-collapse';
 import { Button, Typography, AppBar, Toolbar } from "@mui/material";
+import ColorButton from "./styledButtons";
 
 
 //var expandCollapse = require("cytoscape-expand-collapse");
@@ -289,8 +290,8 @@ function App() {
           <div className="wrapper">
 
            
-            <Button className="Button" disabled={disableVisNow} color="error"  variant="contained" onClick={visualizeNowModefunction}>Visualize at the end</Button>&nbsp;
-            <Button className="Button" disabled={!disableVisNow} color="error"  variant="contained" onClick={visualizeContinouslyModefunction}>Visualize Continously</Button>
+          <ColorButton disabled={disableVisNow}  variant="contained" onClick={visualizeNowModefunction}>Visualize at the end</ColorButton>&nbsp;
+            <ColorButton disabled={!disableVisNow}  variant="contained" onClick={visualizeContinouslyModefunction}>Visualize Continously</ColorButton>
 
             <hr />
             <div>
@@ -298,11 +299,11 @@ function App() {
               <textarea id="clincalNotesTextField" name="clincalNotesTextField" rows="15" cols="100"
                 value={Notes} onChange={e => setNotes(e.target.value)} onKeyPress={(e) => checkKeyChanged(e)}>
               </textarea>
-              <Button className="Button" disabled={!disableVisNow} color="error"  variant="contained" onClick={visualizeNow}>Visualize Now</Button>&nbsp;
-              <Button className="Button" color="secondary"  variant="contained" onClick={FromEPIC} >From EPIC</Button>&nbsp;
+              <ColorButton disabled={!disableVisNow} variant="contained" onClick={visualizeNow}>Visualize Now</ColorButton>&nbsp;
               <Button className="test" color="success"  variant="contained" onClick={() => cytoRef.current.reset()}>Cytofunctionalities</Button>&nbsp;
-              <div className="height">               
-                <Button className="epic" color="secondary"  variant="contained" onClick={resetData} >Reset</Button>
+              <div className="height">
+                <Button style={{backgroundColor: '#800080'}} variant="contained" onClick={FromEPIC} >From EPIC</Button>&nbsp;
+                <Button style={{backgroundColor: '#800080'}} variant="contained" onClick={resetData} >Reset</Button>
                 </div>
 
             </div>
