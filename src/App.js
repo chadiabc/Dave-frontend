@@ -11,31 +11,38 @@ import { useRef } from "react";
 //var expandCollapse = require("cytoscape-expand-collapse");
 cytoscape.use(dagre);
 
-var options = {
-  layoutBy: null, // to rearrange after expand/collapse. It's just layout options or whole layout function. Choose your side!
-  // recommended usage: use cose-bilkent layout with randomize: false to preserve mental map upon expand/collapse
-  fisheye: true, // whether to perform fisheye view after expand/collapse you can specify a function too
-  animate: true, // whether to animate on drawing changes you can specify a function too
-  animationDuration: 1000, // when animate is true, the duration in milliseconds of the animation
-  ready: function () { }, // callback when expand/collapse initialized
-  undoable: true, // and if undoRedoExtension exists,
 
-  cueEnabled: true, // Whether cues are enabled
-  expandCollapseCuePosition: 'top-left', // default cue position is top left you can specify a function per node too
-  expandCollapseCueSize: 12, // size of expand-collapse cue
-  expandCollapseCueLineSize: 8, // size of lines used for drawing plus-minus icons
-  expandCueImage: undefined, // image of expand icon if undefined draw regular expand cue
-  collapseCueImage: undefined, // image of collapse icon if undefined draw regular collapse cue
-  expandCollapseCueSensitivity: 1, // sensitivity of expand-collapse cues
-  edgeTypeInfo: "edgeType", // the name of the field that has the edge type, retrieved from edge.data(), can be a function, if reading the field returns undefined the collapsed edge type will be "unknown"
-  groupEdgesOfSameTypeOnCollapse : false, // if true, the edges to be collapsed will be grouped according to their types, and the created collapsed edges will have same type as their group. if false the collapased edge will have "unknown" type.
-  allowNestedEdgeCollapse: true, // when you want to collapse a compound edge (edge which contains other edges) and normal edge, should it collapse without expanding the compound first
-  zIndex: 999 // z-index value of the canvas in which cue ımages are drawn
-};
+const collapsed = [
+  {
+    selector: "node",
+    style: {
+      display: "none"
+      
+    }
+  }
+]
 
+const layoutdagre={
+  name: "dagre",
+  // other options
+  padding: 5,
+  idealEdgeLength: 10,
+  edgeElasticity: 0.1,
+  spacingFactor: 1,
+  fit: true,
+  rankDir: "TB",
+  animate: true,
+  animationDuration: 1000,
+  ranker: 'network-simplex',
+  animateFilter: function( node, i ){ return true; },
+
+}
 
 const cytoscapeStylesheet = [
-  {
+  
+    {
+     
+ 
     selector: "node",
     style: {
       "background-color": "#F5F5DC",
@@ -45,8 +52,10 @@ const cytoscapeStylesheet = [
       shape: "rectangle",
       'text-wrap': 'wrap',
       label: 'My multiline\nlabel',
+      
     }
   },
+  
   {
     selector: "node[label]",
     style: {
@@ -60,10 +69,12 @@ const cytoscapeStylesheet = [
   {
     selector: "edge",
     style: {
-      "curve-style": "bezier",
+      "curve-style": "taxi",
+      "taxi-direction": "auto", 
+
       "target-arrow-shape": "triangle",
       "line-style": 'straight',
-      'width': 1.5
+      'width': 2
     }
   },
   {
@@ -83,7 +94,17 @@ const cytoscapeStylesheet = [
 
       // "text-rotation": "autorotate"
     }
+
   },
+  {
+  selector: ".collapsedchild",
+  css: {
+    'display': "none",
+    
+  },
+  
+  
+}
   
 ]
 
@@ -96,6 +117,7 @@ function App() {
   const [show, setShow] = useState(false);
   const [graph,setGraph] = useState("null");
   const cytoRef = useRef(null)
+
 
   function getgraph() {
     fetch(`${SERVER_URL}/getgraph`)
@@ -116,6 +138,7 @@ function App() {
       if (e.code === 'Space' || e.code === 'Enter') {
         console.log(Notes);
         postData(`${SERVER_URL}/Addnote`, { text: Notes })
+        
      
         
 
@@ -173,6 +196,7 @@ function App() {
   }
 
 
+
   async function postData(url = '', data = {}) {
     const response = await fetch(url, {
 
@@ -185,7 +209,30 @@ function App() {
     setGraph("null");
     const datar = await response.json();
     setGraph(datar.elementss);
+    
     cytoRef.current.nodes(datar.topNode).style('background-color', '#00ffff');
+    var myNode1 = cytoRef.current.nodes('[id="A3"]')[0]
+    var myNode2 = cytoRef.current.nodes('[id="A12"]')[0]
+    myNode1.style('background-color', '#ffb6c1');
+    myNode2.style('background-color', '#ffb6c1');
+    myNode1.successors().addClass('collapsedchild')
+    myNode2.successors().addClass('collapsedchild')
+    cytoRef.current.zoomingEnabled( true );
+    myNode1.on('tap', function(evt){
+      myNode1.successors().toggleClass("collapsedchild");
+    });
+    myNode2.on('tap', function(evt){
+      myNode2.successors().toggleClass("collapsedchild");
+    });
+    
+
+    // cytoRef.current.zoom({
+    //   level: 1/0,
+    //   position: myNode.position()
+    // });
+    
+
+
     // cytoRef.current.expandCollapse(options);
     // var api = cytoRef.current.expandCollapse('get');
     // api.collapseAll(options);
@@ -200,8 +247,8 @@ function App() {
       <div className="graphBox">
         <div className="graphBoxLeft">
           <div className="wrapper">
-            <button id="now-mode-button" disabled={disableVisNow} className="button" type="button" onClick={visualizeNowModefunction}>Visualize at the end</button> |
-            <button id="continous-mode-button" disabled={!disableVisNow} className="button" type="button" onClick={visualizeContinouslyModefunction}>Visualize Continously</button>
+            <button id="now-mode-button" disabled={!disableVisNow} className="button" type="button" onClick={visualizeNowModefunction}>Visualize at the end</button> |
+            <button id="continous-mode-button" disabled={disableVisNow} className="button" type="button" onClick={visualizeContinouslyModefunction}>Visualize Continously</button>
             <hr />
             <div>
               <label htmlFor="clincalNotesTextField">Write your notes here</label>
@@ -221,14 +268,7 @@ function App() {
             <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
              autoungrabify={true} className="cyto"
              cy={ref => cytoRef.current = ref}
-              elements={CytoscapeComponent.normalizeElements(graph)} layout={{
-              name: "dagre",
-              // other options
-              padding: 10,
-              idealEdgeLength: 10,
-              edgeElasticity: 0.1
-
-            }}
+              elements={CytoscapeComponent.normalizeElements(graph)} layout={layoutdagre}
             stylesheet={cytoscapeStylesheet} />
           }
         </div>

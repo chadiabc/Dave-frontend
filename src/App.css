@@ -11,7 +11,11 @@ body {
 .header h1 {
   color: #fff;
  }
-
+ .collapsed-child { 
+   opacity: 0;
+   display: none;
+   visibility: hidden;
+ }
 .wrapper {
   margin-top: 50px;
   background-color: #fff;
