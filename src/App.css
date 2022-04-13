@@ -150,7 +150,7 @@ button[disabled]{
 
 .cyto {
   background-color: #cddaff;
-  top :99px;
+  top :64px;
   bottom: 0px;
   position:absolute;
   border-left: 1px solid #111;
@@ -162,3 +162,24 @@ button[disabled]{
   background-color: greenyellow;
   color:black;
 }
+
+.Button {
+  color: black;
+}
+
+/* Increase the specificity */
+.Button:disabled {
+  color: white;
+}
+
+.height {
+  position:relative;
+    top:2px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #d50059;
+ }
