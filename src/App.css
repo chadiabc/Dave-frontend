@@ -76,7 +76,7 @@ button[disabled]{
 
  @media only screen and (min-width: 1400px) {
   .wrapper {
-  width: 40%;
+  width: 85%;
   }
   .wrapper input {
   width: 600px;
@@ -84,16 +84,102 @@ button[disabled]{
  }
  @media only screen and (max-width: 1399px) and (min-width: 750px) {
   .wrapper {
-  width: 40%;
+  width: 85%;
   }
   .wrapper input {
   width: 400px;
   }
  }
 
- .vertical {
+ /* .vertical {
   border-left: 1px solid black;
-  height: 90%;
+  height: 100%;
   position:absolute;
   left: 50%;
+} */
+
+/* Split the screen in half */
+.split {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
 }
+
+/* Control the left side */
+.left {
+  left: 0;
+  background-color: #111;
+}
+
+/* Control the right side */
+.right {
+  right: 0;
+  background-color: red;
+  z-index: 1;
+}
+
+/* If you want the content centered horizontally and vertically */
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.epic {
+  background-color: purple;
+}
+
+.graphBox {
+  display: flex;
+}
+
+.graphBoxLeft {
+  flex: 40%;
+}
+
+.graphBoxRight{
+  flex: 60%;
+  /* background-color: plum; */
+}
+
+.cyto {
+  background-color: #cddaff;
+  top :64px;
+  bottom: 0px;
+  position:absolute;
+  border-left: 1px solid #111;
+  width: 60%;
+  /* height: 60%; */
+}
+
+.test {
+  background-color: greenyellow;
+  color:black;
+}
+
+.Button {
+  color: black;
+}
+
+/* Increase the specificity */
+.Button:disabled {
+  color: white;
+}
+
+.height {
+  position:relative;
+    top:2px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #d50059;
+ }
