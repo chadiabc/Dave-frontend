@@ -211,19 +211,53 @@ function App() {
     setGraph(datar.elementss);
     
     cytoRef.current.nodes(datar.topNode).style('background-color', '#00ffff');
-    var myNode1 = cytoRef.current.nodes('[id="A3"]')[0]
-    var myNode2 = cytoRef.current.nodes('[id="A12"]')[0]
+    var myNode1 = cytoRef.current.nodes('[id="A3"]')[0];
+    var myNode2 = cytoRef.current.nodes('[id="A12"]')[0];
+    var level3Nodes = cytoRef.current.nodes('[type="3"]');
     myNode1.style('background-color', '#ffb6c1');
     myNode2.style('background-color', '#ffb6c1');
-    myNode1.successors().addClass('collapsedchild')
-    myNode2.successors().addClass('collapsedchild')
+    myNode1.successors().addClass('collapsedchild');
+    myNode2.successors().addClass('collapsedchild');
     cytoRef.current.zoomingEnabled( true );
+
+    cytoRef.current.on('click','node', function(evt){
+      var targetNode = cytoRef.current.nodes("[id = '" + evt.target.data().id + "']");
+      console.log(evt.target.data().id)
+      cytoRef.current.animate({
+        fit:{
+          eles: targetNode,
+          padding: 20
+        }
+      },
+      {
+
+        duration: 500
+      });
+    });
+
     myNode1.on('tap', function(evt){
-      myNode1.successors().toggleClass("collapsedchild");
+    myNode1.successors().toggleClass("collapsedchild");
+   
     });
     myNode2.on('tap', function(evt){
       myNode2.successors().toggleClass("collapsedchild");
     });
+    //   cytoRef.current.animate({
+    //     fit: {
+    //       eles: myNode2,
+    //       padding: 20
+    //     }
+    //   }, {
+    //     duration: 1000
+    //   });
+
+    // });
+    // level3Nodes.style('background-color', '#ffb6c1');
+    // level3Nodes.successors().addClass('collapsedchild')
+    // level3Nodes.on('tap', function(evt){
+    //     level3Nodes.successors().toggleClass("collapsedchild");
+    //   });
+    
     
 
     // cytoRef.current.zoom({
@@ -266,7 +300,7 @@ function App() {
         <div className="graphBoxRight">
           {graph != "null" &&
             <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
-             autoungrabify={true} className="cyto"
+             autoungrabify={true} userPanningEnabled={false} className="cyto"
              cy={ref => cytoRef.current = ref}
               elements={CytoscapeComponent.normalizeElements(graph)} layout={layoutdagre}
             stylesheet={cytoscapeStylesheet} />
