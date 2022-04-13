@@ -6,6 +6,8 @@ import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import Graphbox from "./graphBox";
 import { useRef } from "react";
+import { expandCollapse,expandCollapseUtilities} from 'cytoscape-expand-collapse';
+import { Button, Typography, AppBar, Toolbar } from "@mui/material";
 
 
 //var expandCollapse = require("cytoscape-expand-collapse");
@@ -211,6 +213,7 @@ function App() {
     setGraph(datar.elementss);
     
     cytoRef.current.nodes(datar.topNode).style('background-color', '#00ffff');
+
     var myNode1 = cytoRef.current.nodes('[id="A3"]')[0];
     var myNode2 = cytoRef.current.nodes('[id="A12"]')[0];
     var level3Nodes = cytoRef.current.nodes('[type="3"]');
@@ -267,32 +270,41 @@ function App() {
     
 
 
-    // cytoRef.current.expandCollapse(options);
-    // var api = cytoRef.current.expandCollapse('get');
-    // api.collapseAll(options);
+
     
   }
 
   return (
     <div className="App">
-      <div className="header">
+      {/* <div className="header">
         <h1> DAVE</h1>
-      </div>
+      </div> */}
+      <AppBar position="static">
+        <Toolbar classes={{ root: "nav" }}>
+          <Typography variant="h5">DAVE</Typography>
+        </Toolbar>
+          </AppBar>
       <div className="graphBox">
         <div className="graphBoxLeft">
           <div className="wrapper">
-            <button id="now-mode-button" disabled={!disableVisNow} className="button" type="button" onClick={visualizeNowModefunction}>Visualize at the end</button> |
-            <button id="continous-mode-button" disabled={disableVisNow} className="button" type="button" onClick={visualizeContinouslyModefunction}>Visualize Continously</button>
+
+           
+            <Button className="Button" disabled={disableVisNow} color="error"  variant="contained" onClick={visualizeNowModefunction}>Visualize at the end</Button>&nbsp;
+            <Button className="Button" disabled={!disableVisNow} color="error"  variant="contained" onClick={visualizeContinouslyModefunction}>Visualize Continously</Button>
+
             <hr />
             <div>
-              <label htmlFor="clincalNotesTextField">Write your notes here</label>
+              <Typography variant="h5">Write your notes here</Typography>
               <textarea id="clincalNotesTextField" name="clincalNotesTextField" rows="15" cols="100"
                 value={Notes} onChange={e => setNotes(e.target.value)} onKeyPress={(e) => checkKeyChanged(e)}>
               </textarea>
-              <button id="visualize-button" disabled={!disableVisNow} className="button" type="button" onClick={visualizeNow}>Visualize Now</button>
-              <button id="visualize-button" className="button epic" type="button" onClick={FromEPIC}>From EPIC</button>
-              <button id="visualize-button" className="button test" type="button" onClick={() => cytoRef.current.reset()}>Cytofunctionalities</button>
-              <button id="visualize-button" className="button epic" type="button" onClick={resetData}>Reset</button>
+              <Button className="Button" disabled={!disableVisNow} color="error"  variant="contained" onClick={visualizeNow}>Visualize Now</Button>&nbsp;
+              <Button className="Button" color="secondary"  variant="contained" onClick={FromEPIC} >From EPIC</Button>&nbsp;
+              <Button className="test" color="success"  variant="contained" onClick={() => cytoRef.current.reset()}>Cytofunctionalities</Button>&nbsp;
+              <div className="height">               
+                <Button className="epic" color="secondary"  variant="contained" onClick={resetData} >Reset</Button>
+                </div>
+
             </div>
           </div>
         </div>
