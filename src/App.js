@@ -128,6 +128,7 @@ var SERVER_URL = "http://127.0.0.1:5000"
 
 function App() {
   let [Notes, setNotes] = useState("");
+  let [showText, setShowText] = useState(true);
   const [disableVisNow, setDisable] = React.useState(false);
   const [show, setShow] = useState(false);
   const [graph, setGraph] = useState("null");
@@ -153,12 +154,6 @@ function App() {
       if (e.code === 'Space' || e.code === 'Enter') {
         console.log(Notes);
         postData(`${SERVER_URL}/Addnote`, { text: Notes })
-
-
-
-
-
-
         // getgraph();
       }
   }
@@ -287,6 +282,15 @@ function App() {
       <AppBar position="static">
         <Toolbar classes={{ root: "nav" }}>
           <Button style={{ backgroundColor: '#800080' }} variant="contained" onClick={FromEPIC} >From EPIC</Button>
+          {/* <div className="text-switch"> */}
+          <FormGroup>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    {/* <Typography>Hide Note</Typography> */}
+                    <Switch defaultChecked onChange={() =>setShowText(!showText)} inputProps={{ 'aria-label': 'ant design' }} />
+                    <Typography>Show Note</Typography>
+                  </Stack>
+                </FormGroup>
+          {/* </div> */}
           <Typography style={{ textAlign: "center" }} variant="h5">DAVE</Typography>
           <div>
             {/* <ThemeProvider theme={theme}> */}
@@ -300,30 +304,30 @@ function App() {
       </AppBar>
       <div className="graphBox">
         <div className="graphBoxLeft">
-          <div className="wrapper">
-            <div>
-              <Typography variant="h5">Write your notes here</Typography>
-              <textarea id="clincalNotesTextField" name="clincalNotesTextField" rows="15" cols="100"
-                value={Notes} onChange={e => setNotes(e.target.value)} onKeyPress={(e) => checkKeyChanged(e)}>
-              </textarea>
-              <ColorButton disabled={!disableVisNow} variant="contained" onClick={visualizeNow}>Visualize Now</ColorButton>&nbsp;
-              <div className="height">
-                <FormGroup>
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Typography>Visualize At the End</Typography>
-                    <Switch defaultChecked onChange={() =>setDisable(!disableVisNow)} inputProps={{ 'aria-label': 'ant design' }} />
-                    <Typography>Visualize Continously</Typography>
-                  </Stack>
-                </FormGroup>
-              </div>
-            </div>
-          </div>
+        {showText &&
+                      <div className="wrapper">
+                      <div>
+                        <Typography variant="h5">Write your notes here</Typography>
+                        <textarea id="clincalNotesTextField" name="clincalNotesTextField" rows="15" cols="100"
+                          value={Notes} onChange={e => setNotes(e.target.value)} onKeyPress={(e) => checkKeyChanged(e)}>
+                        </textarea>
+                        <ColorButton disabled={!disableVisNow} variant="contained" onClick={visualizeNow}>Visualize</ColorButton>&nbsp;
+                        <div className="height">
+                          <FormGroup>
+                            <Stack direction="row" spacing={1} alignItems="center">
+                              <Switch defaultChecked onChange={() =>setDisable(!disableVisNow)} inputProps={{ 'aria-label': 'ant design' }} />
+                              <Typography>Visualize Continously</Typography>
+                            </Stack>
+                          </FormGroup>
+                        </div>
+                      </div>
+                    </div>
+          }
         </div>
-
         <div className="graphBoxRight">
           {graph != "null" &&
             <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
-              autoungrabify={true} userPanningEnabled={false} className="cyto"
+              autoungrabify={true} userPanningEnabled={true} className="cyto"
               cy={ref => cytoRef.current = ref}
               elements={CytoscapeComponent.normalizeElements(graph)} layout={layoutdagre}
               stylesheet={cytoscapeStylesheet} />
