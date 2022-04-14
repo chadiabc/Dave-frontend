@@ -3,21 +3,13 @@ body {
   font-family: Helvetica, Arial;
   /* color:turquoise; */
  }
-
-.header {
-  background-color: #d50059;
-  padding: 10px;
- }
-.header h1 {
-  color: #fff;
- }
  .collapsed-child { 
    opacity: 0;
    display: none;
    visibility: hidden;
  }
 .wrapper {
-  margin-top: 50px;
+  margin-top: 250px;
   background-color: #fff;
   border-radius: 15px;
   margin-left: 10px;
@@ -25,21 +17,8 @@ body {
   padding: 30px;
   /* width: 50%; */
  }
-.wrapper p {
-  font-style: italic;
-  color: #666;
- }
 
- .wrapper label {
-  display: block;
- }
- .wrapper input {
-  /* width: 600px; */
-  padding: 3px 6px;
- }
- .amount-input {
-  margin-bottom: 10px;
- }
+
  textarea {
   height: 200px;
   margin-bottom: 10px;
@@ -50,30 +29,7 @@ body {
   box-sizing: border-box;
   resize: none;
 }
- .wrapper select {
-  display: block;
- }
- .button {
-  margin: 10px 2px;
-  padding: 5px 20px;
-  border-radius: 8px;
-  background-color: #d50059;
-  border: none;
-  color: #fff;
-  text-align: center;
-  display: inline-block;
-  font-size: small;
- } 
- .button:hover {
-  cursor: pointer;
-  opacity: 0.75;
- }
- button:disabled,
-button[disabled]{
-  border: 1px solid #999999;
-  background-color: #cccccc;
-  color: #666666;
-}
+
  .wrapper hr {
   margin: 40px auto;
  }
@@ -133,10 +89,6 @@ button[disabled]{
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-}
-
-.epic {
-  background-color: purple;
 }
 
 .graphBox {

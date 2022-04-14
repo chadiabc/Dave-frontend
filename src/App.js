@@ -6,8 +6,8 @@ import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import Graphbox from "./graphBox";
 import { useRef } from "react";
-import { expandCollapse,expandCollapseUtilities} from 'cytoscape-expand-collapse';
-import { Button, Typography, AppBar, Toolbar } from "@mui/material";
+import { expandCollapse, expandCollapseUtilities } from 'cytoscape-expand-collapse';
+import { Button, Typography, AppBar, Toolbar, createTheme, ThemeProvider, FormGroup, Stack, Switch } from "@mui/material";
 import ColorButton from "./styledButtons";
 
 
@@ -20,12 +20,24 @@ const collapsed = [
     selector: "node",
     style: {
       display: "none"
-      
+
     }
   }
 ]
 
-const layoutdagre={
+const theme = createTheme({
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+        },
+      },
+    },
+  },
+});
+
+
+const layoutdagre = {
   name: "dagre",
   // other options
   padding: 5,
@@ -37,15 +49,15 @@ const layoutdagre={
   animate: true,
   animationDuration: 1000,
   ranker: 'network-simplex',
-  animateFilter: function( node, i ){ return true; },
+  animateFilter: function (node, i) { return true; },
 
 }
 
 const cytoscapeStylesheet = [
-  
-    {
-     
- 
+
+  {
+
+
     selector: "node",
     style: {
       "background-color": "#F5F5DC",
@@ -55,10 +67,10 @@ const cytoscapeStylesheet = [
       shape: "rectangle",
       'text-wrap': 'wrap',
       label: 'My multiline\nlabel',
-      
+
     }
   },
-  
+
   {
     selector: "node[label]",
     style: {
@@ -73,7 +85,7 @@ const cytoscapeStylesheet = [
     selector: "edge",
     style: {
       "curve-style": "taxi",
-      "taxi-direction": "auto", 
+      "taxi-direction": "auto",
 
       "target-arrow-shape": "triangle",
       "line-style": 'straight',
@@ -100,15 +112,15 @@ const cytoscapeStylesheet = [
 
   },
   {
-  selector: ".collapsedchild",
-  css: {
-    'display': "none",
-    
-  },
-  
-  
-}
-  
+    selector: ".collapsedchild",
+    css: {
+      'display': "none",
+
+    },
+
+
+  }
+
 ]
 
 var SERVER_URL = "http://127.0.0.1:5000"
@@ -118,7 +130,7 @@ function App() {
   let [Notes, setNotes] = useState("");
   const [disableVisNow, setDisable] = React.useState(false);
   const [show, setShow] = useState(false);
-  const [graph,setGraph] = useState("null");
+  const [graph, setGraph] = useState("null");
   const cytoRef = useRef(null)
 
 
@@ -141,12 +153,12 @@ function App() {
       if (e.code === 'Space' || e.code === 'Enter') {
         console.log(Notes);
         postData(`${SERVER_URL}/Addnote`, { text: Notes })
-        
-     
-        
 
-          
-        
+
+
+
+
+
         // getgraph();
       }
   }
@@ -154,17 +166,19 @@ function App() {
     console.log(Notes);
     postData(`${SERVER_URL}/AddnoteNow`, { text: Notes });
   }
-  
+
 
 
 
 
   function visualizeNowModefunction() {
     console.log("at the end");
-    // setShow(prev => !prev);
     setDisable(true)
-    // setVisualizeNowMode(true);
+  }
 
+  function visualizeContinouslyModefunction() {
+    console.log("dynamic");
+    setDisable(false)
   }
   function FromEPIC() {
     fetch(`${SERVER_URL}/getnoteepic`)
@@ -174,12 +188,9 @@ function App() {
 
       });
   }
-  function visualizeContinouslyModefunction() {
-    console.log("dynamic");
-    setDisable(false)
-  }
 
-  function resetData(){
+
+  function resetData() {
     reset(`${SERVER_URL}/reset`);
     setNotes("");
     console.log("reset")
@@ -212,7 +223,7 @@ function App() {
     setGraph("null");
     const datar = await response.json();
     setGraph(datar.elementss);
-    
+
     cytoRef.current.nodes(datar.topNode).style('background-color', '#00ffff');
 
     var myNode1 = cytoRef.current.nodes('[id="A3"]')[0];
@@ -222,28 +233,28 @@ function App() {
     myNode2.style('background-color', '#ffb6c1');
     myNode1.successors().addClass('collapsedchild');
     myNode2.successors().addClass('collapsedchild');
-    cytoRef.current.zoomingEnabled( true );
+    cytoRef.current.zoomingEnabled(true);
 
-    cytoRef.current.on('click','node', function(evt){
+    cytoRef.current.on('click', 'node', function (evt) {
       var targetNode = cytoRef.current.nodes("[id = '" + evt.target.data().id + "']");
       console.log(evt.target.data().id)
       cytoRef.current.animate({
-        fit:{
+        fit: {
           eles: targetNode,
           padding: 20
         }
       },
-      {
+        {
 
-        duration: 500
-      });
+          duration: 500
+        });
     });
 
-    myNode1.on('tap', function(evt){
-    myNode1.successors().toggleClass("collapsedchild");
-   
+    myNode1.on('tap', function (evt) {
+      myNode1.successors().toggleClass("collapsedchild");
+
     });
-    myNode2.on('tap', function(evt){
+    myNode2.on('tap', function (evt) {
       myNode2.successors().toggleClass("collapsedchild");
     });
     //   cytoRef.current.animate({
@@ -261,51 +272,50 @@ function App() {
     // level3Nodes.on('tap', function(evt){
     //     level3Nodes.successors().toggleClass("collapsedchild");
     //   });
-    
-    
+
+
 
     // cytoRef.current.zoom({
     //   level: 1/0,
     //   position: myNode.position()
     // });
-    
 
-
-
-    
   }
 
   return (
     <div className="App">
-      {/* <div className="header">
-        <h1> DAVE</h1>
-      </div> */}
       <AppBar position="static">
         <Toolbar classes={{ root: "nav" }}>
-          <Typography variant="h5">DAVE</Typography>
+          <Button style={{ backgroundColor: '#800080' }} variant="contained" onClick={FromEPIC} >From EPIC</Button>
+          <Typography style={{ textAlign: "center" }} variant="h5">DAVE</Typography>
+          <div>
+            {/* <ThemeProvider theme={theme}> */}
+            <div>
+              <Button className="test" style={{ backgroundColor: '#800080' }} variant="contained" onClick={() => cytoRef.current.reset()}>Reset Zoom</Button>
+              &nbsp;&nbsp;<Button style={{ backgroundColor: '#800080' }} variant="contained" onClick={resetData} >Clear</Button>
+            </div>
+            {/* </ThemeProvider> */}
+          </div>
         </Toolbar>
-          </AppBar>
+      </AppBar>
       <div className="graphBox">
         <div className="graphBoxLeft">
           <div className="wrapper">
-
-           
-          <ColorButton disabled={disableVisNow}  variant="contained" onClick={visualizeNowModefunction}>Visualize at the end</ColorButton>&nbsp;
-            <ColorButton disabled={!disableVisNow}  variant="contained" onClick={visualizeContinouslyModefunction}>Visualize Continously</ColorButton>
-
-            <hr />
             <div>
               <Typography variant="h5">Write your notes here</Typography>
               <textarea id="clincalNotesTextField" name="clincalNotesTextField" rows="15" cols="100"
                 value={Notes} onChange={e => setNotes(e.target.value)} onKeyPress={(e) => checkKeyChanged(e)}>
               </textarea>
               <ColorButton disabled={!disableVisNow} variant="contained" onClick={visualizeNow}>Visualize Now</ColorButton>&nbsp;
-              <Button className="test" color="success"  variant="contained" onClick={() => cytoRef.current.reset()}>Cytofunctionalities</Button>&nbsp;
               <div className="height">
-                <Button style={{backgroundColor: '#800080'}} variant="contained" onClick={FromEPIC} >From EPIC</Button>&nbsp;
-                <Button style={{backgroundColor: '#800080'}} variant="contained" onClick={resetData} >Reset</Button>
-                </div>
-
+                <FormGroup>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <Typography>Visualize At the End</Typography>
+                    <Switch defaultChecked onChange={() =>setDisable(!disableVisNow)} inputProps={{ 'aria-label': 'ant design' }} />
+                    <Typography>Visualize Continously</Typography>
+                  </Stack>
+                </FormGroup>
+              </div>
             </div>
           </div>
         </div>
@@ -313,10 +323,10 @@ function App() {
         <div className="graphBoxRight">
           {graph != "null" &&
             <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
-             autoungrabify={true} userPanningEnabled={false} className="cyto"
-             cy={ref => cytoRef.current = ref}
+              autoungrabify={true} userPanningEnabled={false} className="cyto"
+              cy={ref => cytoRef.current = ref}
               elements={CytoscapeComponent.normalizeElements(graph)} layout={layoutdagre}
-            stylesheet={cytoscapeStylesheet} />
+              stylesheet={cytoscapeStylesheet} />
           }
         </div>
       </div>
