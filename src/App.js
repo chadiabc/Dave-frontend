@@ -4,26 +4,14 @@ import './App.css';
 import CytoscapeComponent from 'react-cytoscapejs';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
-import Graphbox from "./graphBox";
 import { useRef } from "react";
-import { expandCollapse, expandCollapseUtilities } from 'cytoscape-expand-collapse';
 import { Button, Typography, AppBar, Toolbar, createTheme, ThemeProvider, FormGroup, Stack, Switch } from "@mui/material";
 import ColorButton from "./styledButtons";
 
-
-//var expandCollapse = require("cytoscape-expand-collapse");
 cytoscape.use(dagre);
 
 
-const collapsed = [
-  {
-    selector: "node",
-    style: {
-      display: "none"
 
-    }
-  }
-]
 
 const theme = createTheme({
   components: {
@@ -123,8 +111,8 @@ const cytoscapeStylesheet = [
 
 ]
 
-var SERVER_URL = "http://127.0.0.1:5000"
-// var graph = "null"
+var SERVER_URL = "http://192.168.1.110:5000"
+
 
 function App() {
   let [Notes, setNotes] = useState("");
@@ -140,13 +128,12 @@ function App() {
       .then(response => {
         response.json().then(data => {
           setGraph(data.elementss);
-          // graph = data.elementss;
           console.log(graph)
         })
       });
   }
 
-  // console.log(graph)
+
 
 
   function checkKeyChanged(e) {
@@ -154,7 +141,7 @@ function App() {
       if (e.code === 'Space' || e.code === 'Enter') {
         console.log(Notes);
         postData(`${SERVER_URL}/Addnote`, { text: Notes })
-        // getgraph();
+
       }
   }
   function visualizeNow() {
@@ -241,7 +228,7 @@ function App() {
       },
         {
 
-          duration: 500
+          duration: 350
         });
     });
 
@@ -252,28 +239,9 @@ function App() {
     myNode2.on('tap', function (evt) {
       myNode2.successors().toggleClass("collapsedchild");
     });
-    //   cytoRef.current.animate({
-    //     fit: {
-    //       eles: myNode2,
-    //       padding: 20
-    //     }
-    //   }, {
-    //     duration: 1000
-    //   });
-
-    // });
-    // level3Nodes.style('background-color', '#ffb6c1');
-    // level3Nodes.successors().addClass('collapsedchild')
-    // level3Nodes.on('tap', function(evt){
-    //     level3Nodes.successors().toggleClass("collapsedchild");
-    //   });
-
-
-
-    // cytoRef.current.zoom({
-    //   level: 1/0,
-    //   position: myNode.position()
-    // });
+     cytoRef.current.on('click', 'node', function (evt) {
+      var targetNode = cytoRef.current.nodes("[id = '" + evt.target.data().id + "']");
+     })
 
   }
 
