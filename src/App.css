@@ -38,16 +38,10 @@ body {
   .wrapper {
   width: 85%;
   }
-  .wrapper input {
-  width: 600px;
-  }
  }
  @media only screen and (max-width: 1399px) and (min-width: 750px) {
   .wrapper {
   width: 85%;
-  }
-  .wrapper input {
-  width: 400px;
   }
  }
 
@@ -57,57 +51,6 @@ body {
   position:absolute;
   left: 50%;
 } */
-
-/* Split the screen in half */
-.split {
-  height: 100%;
-  width: 50%;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  overflow-x: hidden;
-  padding-top: 20px;
-}
-
-/* Control the left side */
-.left {
-  left: 0;
-  background-color: #111;
-}
-
-/* Control the right side */
-.right {
-  right: 0;
-  background-color: red;
-  z-index: 1;
-}
-
-/* If you want the content centered horizontally and vertically */
-.centered {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-
-
-
-
-.test {
-  background-color: greenyellow;
-  color:black;
-}
-
-.Button {
-  color: black;
-}
-
-/* Increase the specificity */
-.Button:disabled {
-  color: white;
-}
 
 .height {
   position:relative;
