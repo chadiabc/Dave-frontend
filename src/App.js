@@ -4,26 +4,15 @@ import './App.css';
 import CytoscapeComponent from 'react-cytoscapejs';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
-import Graphbox from "./graphBox";
 import { useRef } from "react";
-import { expandCollapse, expandCollapseUtilities } from 'cytoscape-expand-collapse';
 import { Button, Typography, AppBar, Toolbar, createTheme, ThemeProvider, FormGroup, Stack, Switch } from "@mui/material";
 import ColorButton from "./styledButtons";
+import StickyNote2OutlinedIcon from '@mui/icons-material/StickyNote2Outlined';
 
-
-//var expandCollapse = require("cytoscape-expand-collapse");
 cytoscape.use(dagre);
 
 
-const collapsed = [
-  {
-    selector: "node",
-    style: {
-      display: "none"
 
-    }
-  }
-]
 
 const theme = createTheme({
   components: {
@@ -123,8 +112,8 @@ const cytoscapeStylesheet = [
 
 ]
 
-var SERVER_URL = "http://127.0.0.1:5000"
-// var graph = "null"
+var SERVER_URL = "http://127.0.0.1:5000" //"http://192.168.1.110:5000"
+
 
 function App() {
   let [Notes, setNotes] = useState("");
@@ -140,13 +129,12 @@ function App() {
       .then(response => {
         response.json().then(data => {
           setGraph(data.elementss);
-          // graph = data.elementss;
           console.log(graph)
         })
       });
   }
 
-  // console.log(graph)
+
 
 
   function checkKeyChanged(e) {
@@ -154,7 +142,7 @@ function App() {
       if (e.code === 'Space' || e.code === 'Enter') {
         console.log(Notes);
         postData(`${SERVER_URL}/Addnote`, { text: Notes })
-        // getgraph();
+
       }
   }
   function visualizeNow() {
@@ -217,80 +205,53 @@ function App() {
     })
     setGraph("null");
     const datar = await response.json();
-    setGraph(datar.elementss);
+    if (datar.elementss !== "Stall") {
+      setGraph(datar.elementss);
 
-    cytoRef.current.nodes(datar.topNode).style('background-color', '#00ffff');
+      cytoRef.current.nodes(datar.topNode).style('background-color', '#00ffff');
 
-    var myNode1 = cytoRef.current.nodes('[id="A3"]')[0];
-    var myNode2 = cytoRef.current.nodes('[id="A12"]')[0];
-    var level3Nodes = cytoRef.current.nodes('[type="3"]');
-    myNode1.style('background-color', '#ffb6c1');
-    myNode2.style('background-color', '#ffb6c1');
-    myNode1.successors().addClass('collapsedchild');
-    myNode2.successors().addClass('collapsedchild');
-    cytoRef.current.zoomingEnabled(true);
+      var myNode1 = cytoRef.current.nodes('[id="A3"]')[0];
+      var myNode2 = cytoRef.current.nodes('[id="A12"]')[0];
+      var level3Nodes = cytoRef.current.nodes('[type="3"]');
+      myNode1.style('background-color', '#ffb6c1');
+      myNode2.style('background-color', '#ffb6c1');
+      myNode1.successors().addClass('collapsedchild');
+      myNode2.successors().addClass('collapsedchild');
+      cytoRef.current.zoomingEnabled(true);
 
-    cytoRef.current.on('click', 'node', function (evt) {
-      var targetNode = cytoRef.current.nodes("[id = '" + evt.target.data().id + "']");
-      console.log(evt.target.data().id)
-      cytoRef.current.animate({
-        fit: {
-          eles: targetNode,
-          padding: 20
-        }
-      },
-        {
+      cytoRef.current.on('click', 'node', function (evt) {
+        var targetNode = cytoRef.current.nodes("[id = '" + evt.target.data().id + "']");
+        console.log(evt.target.data().id)
+        cytoRef.current.animate({
+          fit: {
+            eles: targetNode,
+            padding: 20
+          }
+        },
+          {
 
-          duration: 500
-        });
-    });
+            duration: 350
+          });
+      });
 
-    myNode1.on('tap', function (evt) {
-      myNode1.successors().toggleClass("collapsedchild");
+      myNode1.on('tap', function (evt) {
+        myNode1.successors().toggleClass("collapsedchild");
 
-    });
-    myNode2.on('tap', function (evt) {
-      myNode2.successors().toggleClass("collapsedchild");
-    });
-    //   cytoRef.current.animate({
-    //     fit: {
-    //       eles: myNode2,
-    //       padding: 20
-    //     }
-    //   }, {
-    //     duration: 1000
-    //   });
+      });
+      myNode2.on('tap', function (evt) {
+        myNode2.successors().toggleClass("collapsedchild");
+      });
+      cytoRef.current.on('click', 'node', function (evt) {
+        var targetNode = cytoRef.current.nodes("[id = '" + evt.target.data().id + "']");
+      })
 
-    // });
-    // level3Nodes.style('background-color', '#ffb6c1');
-    // level3Nodes.successors().addClass('collapsedchild')
-    // level3Nodes.on('tap', function(evt){
-    //     level3Nodes.successors().toggleClass("collapsedchild");
-    //   });
-
-
-
-    // cytoRef.current.zoom({
-    //   level: 1/0,
-    //   position: myNode.position()
-    // });
-
+    }
   }
-
   return (
     <div className="App">
       <AppBar position="static">
         <Toolbar classes={{ root: "nav" }}>
           <Button style={{ backgroundColor: '#800080' }} variant="contained" onClick={FromEPIC} >From EPIC</Button>
-          {/* <div className="text-switch"> */}
-          <FormGroup>
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    {/* <Typography>Hide Note</Typography> */}
-                    <Switch defaultChecked onChange={() =>setShowText(!showText)} inputProps={{ 'aria-label': 'ant design' }} />
-                    <Typography>Show Note</Typography>
-                  </Stack>
-                </FormGroup>
-          {/* </div> */}
           <Typography style={{ textAlign: "center" }} variant="h5">DAVE</Typography>
           <div>
             {/* <ThemeProvider theme={theme}> */}
@@ -303,28 +264,33 @@ function App() {
         </Toolbar>
       </AppBar>
       <div className="graphBox">
-        <div className="graphBoxLeft">
         {showText &&
-                      <div className="wrapper">
-                      <div>
-                        <Typography variant="h5">Write your notes here</Typography>
-                        <textarea id="clincalNotesTextField" name="clincalNotesTextField" rows="15" cols="100"
-                          value={Notes} onChange={e => setNotes(e.target.value)} onKeyPress={(e) => checkKeyChanged(e)}>
-                        </textarea>
-                        <ColorButton disabled={!disableVisNow} variant="contained" onClick={visualizeNow}>Visualize</ColorButton>&nbsp;
-                        <div className="height">
-                          <FormGroup>
-                            <Stack direction="row" spacing={1} alignItems="center">
-                              <Switch defaultChecked onChange={() =>setDisable(!disableVisNow)} inputProps={{ 'aria-label': 'ant design' }} />
-                              <Typography>Visualize Continously</Typography>
-                            </Stack>
-                          </FormGroup>
-                        </div>
-                      </div>
-                    </div>
-          }
-        </div>
+          <div className="graphBoxLeft">
+            <div className="wrapper">
+              <div className="graphBox-wrapper__clinical-notes__header">
+                <Typography variant="h5">Write your notes here</Typography>
+              </div>
+              <textarea id="clincalNotesTextField" name="clincalNotesTextField" rows="15" cols="100"
+                value={Notes} onChange={e => setNotes(e.target.value)} onKeyPress={(e) => checkKeyChanged(e)}>
+              </textarea>
+              <div className="graphBox-wrapper__clinical-notes__action-fields">
+                <FormGroup>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <Switch defaultChecked onChange={() => setDisable(!disableVisNow)} inputProps={{ 'aria-label': 'ant design' }} />
+                    <Typography>Visualize Continously</Typography>
+                  </Stack>
+                </FormGroup>
+                <ColorButton disabled={!disableVisNow} variant="contained" onClick={visualizeNow}>Visualize</ColorButton>
+              </div>
+            </div>
+          </div>
+        }
         <div className="graphBoxRight">
+          <div className="graph-box-right__open-note-button-container">
+            <Button className="graph-box-right__open-note-button" style={{ backgroundColor: '#800080' }} variant="contained" onClick={() => setShowText(!showText)}>
+              <StickyNote2OutlinedIcon></StickyNote2OutlinedIcon>
+            </Button>
+          </div>
           {graph != "null" &&
             <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
               autoungrabify={true} userPanningEnabled={true} className="cyto"
@@ -343,11 +309,3 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
-
-

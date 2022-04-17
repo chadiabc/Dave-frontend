@@ -1,22 +1,109 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+
 body {
+  height: 100%;
+  width: 100%;
+  display: block;
+  position: relative;
   background-color: #e9ebf0;
   font-family: Helvetica, Arial;
   /* color:turquoise; */
+
  }
- .collapsed-child { 
-   opacity: 0;
-   display: none;
-   visibility: hidden;
- }
+
+#root {
+  height: 100%;
+  position: relative;
+  width: 100%; 
+}
+
+.App {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+.graphBox {
+ width:100%;
+ height:100%;
+ overflow:hidden;
+ display: flex;
+ flex-direction: row;
+ background-color: #cddaff;
+}
+
+.graphBoxLeft {
+  height: 100%;
+  width: 40rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.graphBoxRight{
+  width: 100%;
+  height: 100%;
+}
+
+.graph-box-right__open-note-button {
+  height: 2rem;
+  background-color: rgb(128, 0, 128);
+  width: 2rem;
+  margin: 0;
+  padding: 0;
+  min-width: 0 !important;
+}
+
+.graph-box-right__open-note-button-container {
+  position: absolute;
+  margin: 0.5rem;
+  width: 2rem;
+  z-index: 10;
+}
+
 .wrapper {
-  margin-top: 220px;
-  background-color: #fff;
-  border-radius: 15px;
-  margin-left: 10px;
-  margin-right: auto;
-  padding: 30px;
-  /* width: 50%; */
- }
+  padding: 1rem;
+  background-color: purple;
+  border-radius: 1%;
+  margin: 0.5rem 0.5rem;
+  box-shadow: 0px 1px 4px 1px grey;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.cyto {
+  background-color: #cddaff;
+  width: 100%;
+  height: 100%;
+}
+
+.graphBox-wrapper__clinical-notes__header {
+  margin-bottom: 2rem;
+}
+
+#clincalNotesTextField {
+  height: -webkit-fill-available;
+  border-radius: 5px;
+}
+
+.graphBox-wrapper__clinical-notes__action-fields {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.collapsed-child { 
+  opacity: 0;
+  display: none;
+  visibility: hidden;
+}
 
 
  textarea {
@@ -33,7 +120,7 @@ body {
  .wrapper hr {
   margin: 40px auto;
  }
-
+/* 
  @media only screen and (min-width: 1400px) {
   .wrapper {
   width: 85%;
@@ -43,18 +130,18 @@ body {
   .wrapper {
   width: 85%;
   }
- }
+ } */
 
- /* .vertical {
+.vertical {
   border-left: 1px solid black;
   height: 100%;
   position:absolute;
   left: 50%;
-} */
+}
 
 .height {
   position:relative;
-    top:2px;
+  top:2px;
 }
 
 .nav {
@@ -63,37 +150,6 @@ body {
   justify-content: space-between;
   background-color: #d50059;
  }
-
- .graphBox {
-  width:100%;
-  height:100%;
-  overflow:hidden;
-}
-
-.graphBoxLeft {
-
-  position: absolute;
-  width: 400px;
-  left: 0;
-  top: 0;
-  z-index: 10;
-}
-
-.graphBoxRight{
-  /* width: 100%;
-  height: 100%; */
-}
-
-.cyto {
-  background-color: #cddaff;
-  top :64px;
-  bottom: 0px;
-  position:absolute;
-  width: 100%;
-  /* border-left: 1px solid #111; */
-  /* height: 60%; */
-}
-
 .text-switch{
   align-items: flex-start;
 }
