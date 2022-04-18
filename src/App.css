@@ -50,9 +50,27 @@ body {
 }
 
 .graph-box-right__open-note-button {
+  margin-bottom: 2.5px !important;
   height: 2rem;
-  background-color: rgb(128, 0, 128);
   width: 2rem;
+  margin: 0;
+  padding: 0;
+  min-width: 0 !important;
+}
+.graph-box-right__graph-buttons {
+  margin: 2.5px 0 !important;
+  height: 2rem;
+  width: 2rem;
+  margin: 0;
+  padding: 0;
+  min-width: 0 !important;
+}
+.graph-box-right__graph-buttons--disabled {
+  margin: 2.5px 0 !important;
+  height: 2rem;
+  width: 2rem;
+  background-color:#7e4528  !important;
+  color:white !important;
   margin: 0;
   padding: 0;
   min-width: 0 !important;
@@ -63,34 +81,6 @@ body {
   margin: 0.5rem;
   width: 2rem;
   z-index: 10;
-}
-.graph-box-right__graph-1-button {
-  top: 5px;
-  height: 2rem;
-  /* backgroundColor: #800080; */
-  background-color: rgb(128, 0, 128);
-  width: 2rem;
-  margin: 0;
-  padding: 0;
-  min-width: 0 !important;
-}
-.graph-box-right__graph-2-button {
-  top: 10px;
-  height: 2rem;
-  background-color: rgb(128, 0, 128);
-  width: 2rem;
-  margin: 0;
-  padding: 0;
-  min-width: 0 !important;
-}
-.graph-box-right__graph-3-button {
-  top: 15px;
-  height: 2rem;
-  background-color: rgb(128, 0, 128);
-  width: 2rem;
-  margin: 0;
-  padding: 0;
-  min-width: 0 !important;
 }
 
 .wrapper {
@@ -161,3 +151,21 @@ body {
   /* background-color:#1e3d59; */
 
  }
+
+  .graph-box-right__button-container {
+  display:flex;
+  flex-direction: row;
+  white-space: nowrap;
+  
+ }
+
+ .graph-box-right__button-container__label {
+  align-self: center !important;
+  margin-left: 5px !important;
+ }
+
+.graph-box-right__button-container__label--disabled {
+  align-self: center !important;
+  margin-left: 5px !important;
+  opacity: 0.3;
+}

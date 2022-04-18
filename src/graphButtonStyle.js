@@ -6,10 +6,10 @@ import { purple } from '@mui/material/colors';
 
 const GraphButton = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(purple[500]),
-    backgroundColor:  ' #c66b3d',
+    backgroundColor: ' #c66b3d',
     '&:hover': {
-      backgroundColor:  ' #c66b3d',
+        backgroundColor: ' #c66b3d',
     },
-  }));
+}));
 
 export default GraphButton;

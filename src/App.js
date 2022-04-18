@@ -127,6 +127,9 @@ function App() {
   let [showGraph1, setShowGraph1] = useState(false);
   let [showGraph2, setShowGraph2] = useState(true);
   let [showGraph3, setShowGraph3] = useState(true);
+  let [graph1Name, setGraph1Name] = useState("FIRAS IS A WIZARD");
+  let [graph2Name, setGraph2Name] = useState("Chadi IS A WIZARD");
+  let [graph3Name, setGraph3Name] = useState("BOUFI EL MALFUFI IS A WIZARD");
   const [disableVisNow, setDisable] = React.useState(false);
   const [show, setShow] = useState(false);
   const [graph, setGraph] = useState("null");
@@ -299,15 +302,29 @@ function App() {
             <SideButton className="graph-box-right__open-note-button" variant="contained" onClick={() => setShowText(!showText)}>
               <StickyNote2OutlinedIcon></StickyNote2OutlinedIcon>
             </SideButton>
-            <GraphButton className="graph-box-right__graph-1-button" disabled={!showGraph1}  variant="contained" onClick={() => displayGraph1()}>
+            <div className="graph-box-right__button-container">
+            <GraphButton className={`base-class ${showGraph1? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
+             disabled={!showGraph1}  variant="contained" onClick={() => displayGraph1()}>
               <LooksOneOutlinedIcon></LooksOneOutlinedIcon>
             </GraphButton>
-            <GraphButton className="graph-box-right__graph-2-button" disabled={!showGraph2} variant="contained" onClick={() => displayGraph2()}>
+            <label className={`base-class ${!showGraph1? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
+            >{graph1Name}</label>
+            </div>
+            <div className="graph-box-right__button-container">
+            <GraphButton className={`base-class ${showGraph2? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
+             disabled={!showGraph2} variant="contained" onClick={() => displayGraph2()}>
               <LooksTwoOutlinedIcon></LooksTwoOutlinedIcon>
             </GraphButton>
-            <GraphButton className="graph-box-right__graph-3-button" disabled={!showGraph3} variant="contained" onClick={() => displayGraph3()}>
+            <label className={`base-class ${!showGraph2? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
+            >{graph2Name}</label>
+            </div>
+            <div className="graph-box-right__button-container">
+            <GraphButton className={`base-class ${showGraph3? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`} disabled={!showGraph3} variant="contained" onClick={() => displayGraph3()}>
               <Looks3OutlinedIcon></Looks3OutlinedIcon>
             </GraphButton>
+            <label className={`base-class ${!showGraph3? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
+            >{graph3Name}</label>
+            </div>
           </div>
           {graph != "null" &&
             <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
