@@ -32,7 +32,8 @@ body {
  overflow:hidden;
  display: flex;
  flex-direction: row;
- background-color: #cddaff;
+ background-color:#e5e5dc;
+ /* background-color: #ffff; */
 }
 
 .graphBoxLeft {
@@ -63,12 +64,42 @@ body {
   width: 2rem;
   z-index: 10;
 }
+.graph-box-right__graph-1-button {
+  top: 5px;
+  height: 2rem;
+  /* backgroundColor: #800080; */
+  background-color: rgb(128, 0, 128);
+  width: 2rem;
+  margin: 0;
+  padding: 0;
+  min-width: 0 !important;
+}
+.graph-box-right__graph-2-button {
+  top: 10px;
+  height: 2rem;
+  background-color: rgb(128, 0, 128);
+  width: 2rem;
+  margin: 0;
+  padding: 0;
+  min-width: 0 !important;
+}
+.graph-box-right__graph-3-button {
+  top: 15px;
+  height: 2rem;
+  background-color: rgb(128, 0, 128);
+  width: 2rem;
+  margin: 0;
+  padding: 0;
+  min-width: 0 !important;
+}
 
 .wrapper {
   padding: 1rem;
-  background-color: purple;
+  background-color: #26495c;
   border-radius: 1%;
-  margin: 0.5rem 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  margin-left: 0.5rem;
   box-shadow: 0px 1px 4px 1px grey;
   color: white;
   display: flex;
@@ -78,7 +109,7 @@ body {
 }
 
 .cyto {
-  background-color: #cddaff;
+  /* background-color: #cddaff; */
   width: 100%;
   height: 100%;
 }
@@ -117,28 +148,6 @@ body {
   resize: none;
 }
 
- .wrapper hr {
-  margin: 40px auto;
- }
-/* 
- @media only screen and (min-width: 1400px) {
-  .wrapper {
-  width: 85%;
-  }
- }
- @media only screen and (max-width: 1399px) and (min-width: 750px) {
-  .wrapper {
-  width: 85%;
-  }
- } */
-
-.vertical {
-  border-left: 1px solid black;
-  height: 100%;
-  position:absolute;
-  left: 50%;
-}
-
 .height {
   position:relative;
   top:2px;
@@ -148,8 +157,7 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background-color: #d50059;
+  background-color: #26495c;
+  /* background-color:#1e3d59; */
+
  }
-.text-switch{
-  align-items: flex-start;
-}

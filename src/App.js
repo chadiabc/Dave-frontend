@@ -7,7 +7,13 @@ import dagre from 'cytoscape-dagre';
 import { useRef } from "react";
 import { Button, Typography, AppBar, Toolbar, createTheme, ThemeProvider, FormGroup, Stack, Switch } from "@mui/material";
 import ColorButton from "./styledButtons";
+import SideButton from "./sideButtonStyle";
+import GraphButton from "./graphButtonStyle";
+import StyledSwitch from "./StyledSwitch";
 import StickyNote2OutlinedIcon from '@mui/icons-material/StickyNote2Outlined';
+import LooksOneOutlinedIcon from '@mui/icons-material/LooksOneOutlined';
+import LooksTwoOutlinedIcon from '@mui/icons-material/LooksTwoOutlined';
+import Looks3OutlinedIcon from '@mui/icons-material/Looks3Outlined';
 
 cytoscape.use(dagre);
 
@@ -118,11 +124,13 @@ var SERVER_URL = "http://127.0.0.1:5000" //"http://192.168.1.110:5000"
 function App() {
   let [Notes, setNotes] = useState("");
   let [showText, setShowText] = useState(true);
+  let [showGraph1, setShowGraph1] = useState(false);
+  let [showGraph2, setShowGraph2] = useState(true);
+  let [showGraph3, setShowGraph3] = useState(true);
   const [disableVisNow, setDisable] = React.useState(false);
   const [show, setShow] = useState(false);
   const [graph, setGraph] = useState("null");
   const cytoRef = useRef(null)
-
 
   function getgraph() {
     fetch(`${SERVER_URL}/getgraph`)
@@ -133,8 +141,24 @@ function App() {
         })
       });
   }
-
-
+  function displayGraph1(){
+    setShowGraph1(false);
+    setShowGraph2(true);
+    setShowGraph3(true);
+    //show graph 1
+  }
+  function displayGraph2(){
+    setShowGraph1(true);
+    setShowGraph2(false);
+    setShowGraph3(true);
+    //show graph 2
+  }
+  function displayGraph3(){
+    setShowGraph1(true);
+    setShowGraph2(true);
+    setShowGraph3(false);
+    //show graph 3
+  }
 
 
   function checkKeyChanged(e) {
@@ -145,24 +169,12 @@ function App() {
 
       }
   }
+
   function visualizeNow() {
     console.log(Notes);
     postData(`${SERVER_URL}/AddnoteNow`, { text: Notes });
   }
 
-
-
-
-
-  function visualizeNowModefunction() {
-    console.log("at the end");
-    setDisable(true)
-  }
-
-  function visualizeContinouslyModefunction() {
-    console.log("dynamic");
-    setDisable(false)
-  }
   function FromEPIC() {
     fetch(`${SERVER_URL}/getnoteepic`)
       .then(response => response.json())
@@ -171,7 +183,6 @@ function App() {
 
       });
   }
-
 
   function resetData() {
     reset(`${SERVER_URL}/reset`);
@@ -191,8 +202,6 @@ function App() {
     const datar = await response.json();
     setGraph("null");
   }
-
-
 
   async function postData(url = '', data = {}) {
     const response = await fetch(url, {
@@ -251,13 +260,13 @@ function App() {
     <div className="App">
       <AppBar position="static">
         <Toolbar classes={{ root: "nav" }}>
-          <Button style={{ backgroundColor: '#800080' }} variant="contained" onClick={FromEPIC} >From EPIC</Button>
+          <Button style={{ backgroundColor: '#c4a35a' }} variant="contained" onClick={FromEPIC} >From EPIC</Button>
           <Typography style={{ textAlign: "center" }} variant="h5">DAVE</Typography>
           <div>
             {/* <ThemeProvider theme={theme}> */}
             <div>
-              <Button className="test" style={{ backgroundColor: '#800080' }} variant="contained" onClick={() => cytoRef.current.reset()}>Reset Zoom</Button>
-              &nbsp;&nbsp;<Button style={{ backgroundColor: '#800080' }} variant="contained" onClick={resetData} >Clear</Button>
+              <Button className="test" style={{ backgroundColor: '#c4a35a' }} variant="contained" onClick={() => cytoRef.current.reset()}>Reset Zoom</Button>
+              &nbsp;&nbsp;<Button style={{ backgroundColor: ' #c4a35a' }} variant="contained" onClick={resetData} >Clear</Button>
             </div>
             {/* </ThemeProvider> */}
           </div>
@@ -276,7 +285,7 @@ function App() {
               <div className="graphBox-wrapper__clinical-notes__action-fields">
                 <FormGroup>
                   <Stack direction="row" spacing={1} alignItems="center">
-                    <Switch defaultChecked onChange={() => setDisable(!disableVisNow)} inputProps={{ 'aria-label': 'ant design' }} />
+                    <Switch style={{color:'#c4a35a'}} defaultChecked onChange={() => setDisable(!disableVisNow)} inputProps={{ 'aria-label': 'ant design' }} />
                     <Typography>Visualize Continously</Typography>
                   </Stack>
                 </FormGroup>
@@ -287,9 +296,18 @@ function App() {
         }
         <div className="graphBoxRight">
           <div className="graph-box-right__open-note-button-container">
-            <Button className="graph-box-right__open-note-button" style={{ backgroundColor: '#800080' }} variant="contained" onClick={() => setShowText(!showText)}>
+            <SideButton className="graph-box-right__open-note-button" variant="contained" onClick={() => setShowText(!showText)}>
               <StickyNote2OutlinedIcon></StickyNote2OutlinedIcon>
-            </Button>
+            </SideButton>
+            <GraphButton className="graph-box-right__graph-1-button" disabled={!showGraph1}  variant="contained" onClick={() => displayGraph1()}>
+              <LooksOneOutlinedIcon></LooksOneOutlinedIcon>
+            </GraphButton>
+            <GraphButton className="graph-box-right__graph-2-button" disabled={!showGraph2} variant="contained" onClick={() => displayGraph2()}>
+              <LooksTwoOutlinedIcon></LooksTwoOutlinedIcon>
+            </GraphButton>
+            <GraphButton className="graph-box-right__graph-3-button" disabled={!showGraph3} variant="contained" onClick={() => displayGraph3()}>
+              <Looks3OutlinedIcon></Looks3OutlinedIcon>
+            </GraphButton>
           </div>
           {graph != "null" &&
             <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
