@@ -162,10 +162,12 @@ body {
  .graph-box-right__button-container__label {
   align-self: center !important;
   margin-left: 5px !important;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
  }
 
 .graph-box-right__button-container__label--disabled {
   align-self: center !important;
   margin-left: 5px !important;
   opacity: 0.3;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
 }

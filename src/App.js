@@ -127,9 +127,9 @@ function App() {
   let [showGraph1, setShowGraph1] = useState(false);
   let [showGraph2, setShowGraph2] = useState(true);
   let [showGraph3, setShowGraph3] = useState(true);
-  let [graph1Name, setGraph1Name] = useState("FIRAS IS A WIZARD");
-  let [graph2Name, setGraph2Name] = useState("Chadi IS A WIZARD");
-  let [graph3Name, setGraph3Name] = useState("BOUFI EL MALFUFI IS A WIZARD");
+  let [graph1Name, setGraph1Name] = useState("algo 1 name");
+  let [graph2Name, setGraph2Name] = useState("algo 2 name");
+  let [graph3Name, setGraph3Name] = useState("algo 3 name");
   const [disableVisNow, setDisable] = React.useState(false);
   const [show, setShow] = useState(false);
   const [graph, setGraph] = useState("null");
