@@ -17,21 +17,6 @@ import Looks3OutlinedIcon from '@mui/icons-material/Looks3Outlined';
 
 cytoscape.use(dagre);
 
-
-
-
-const theme = createTheme({
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-        },
-      },
-    },
-  },
-});
-
-
 const layoutdagre = {
   name: "dagre",
   // other options
@@ -144,19 +129,19 @@ function App() {
         })
       });
   }
-  function displayGraph1(){
+  function displayGraph1() {
     setShowGraph1(false);
     setShowGraph2(true);
     setShowGraph3(true);
     //show graph 1
   }
-  function displayGraph2(){
+  function displayGraph2() {
     setShowGraph1(true);
     setShowGraph2(false);
     setShowGraph3(true);
     //show graph 2
   }
-  function displayGraph3(){
+  function displayGraph3() {
     setShowGraph1(true);
     setShowGraph2(true);
     setShowGraph3(false);
@@ -266,12 +251,10 @@ function App() {
           <Button style={{ backgroundColor: '#c4a35a' }} variant="contained" onClick={FromEPIC} >From EPIC</Button>
           <Typography style={{ textAlign: "center" }} variant="h5">DAVE</Typography>
           <div>
-            {/* <ThemeProvider theme={theme}> */}
             <div>
               <Button className="test" style={{ backgroundColor: '#c4a35a' }} variant="contained" onClick={() => cytoRef.current.reset()}>Reset Zoom</Button>
               &nbsp;&nbsp;<Button style={{ backgroundColor: ' #c4a35a' }} variant="contained" onClick={resetData} >Clear</Button>
             </div>
-            {/* </ThemeProvider> */}
           </div>
         </Toolbar>
       </AppBar>
@@ -288,7 +271,7 @@ function App() {
               <div className="graphBox-wrapper__clinical-notes__action-fields">
                 <FormGroup>
                   <Stack direction="row" spacing={1} alignItems="center">
-                    <Switch style={{color:'#c4a35a'}} defaultChecked onChange={() => setDisable(!disableVisNow)} inputProps={{ 'aria-label': 'ant design' }} />
+                    <Switch style={{ color: '#c4a35a' }} defaultChecked onChange={() => setDisable(!disableVisNow)} inputProps={{ 'aria-label': 'ant design' }} />
                     <Typography>Visualize Continously</Typography>
                   </Stack>
                 </FormGroup>
@@ -303,27 +286,27 @@ function App() {
               <StickyNote2OutlinedIcon></StickyNote2OutlinedIcon>
             </SideButton>
             <div className="graph-box-right__button-container">
-            <GraphButton className={`base-class ${showGraph1? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
-             disabled={!showGraph1}  variant="contained" onClick={() => displayGraph1()}>
-              <LooksOneOutlinedIcon></LooksOneOutlinedIcon>
-            </GraphButton>
-            <label className={`base-class ${!showGraph1? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
-            >{graph1Name}</label>
+              <GraphButton className={`base-class ${showGraph1 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
+                disabled={!showGraph1} variant="contained" onClick={() => displayGraph1()}>
+                <LooksOneOutlinedIcon></LooksOneOutlinedIcon>
+              </GraphButton>
+              <label className={`base-class ${!showGraph1 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
+              >{graph1Name}</label>
             </div>
             <div className="graph-box-right__button-container">
-            <GraphButton className={`base-class ${showGraph2? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
-             disabled={!showGraph2} variant="contained" onClick={() => displayGraph2()}>
-              <LooksTwoOutlinedIcon></LooksTwoOutlinedIcon>
-            </GraphButton>
-            <label className={`base-class ${!showGraph2? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
-            >{graph2Name}</label>
+              <GraphButton className={`base-class ${showGraph2 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
+                disabled={!showGraph2} variant="contained" onClick={() => displayGraph2()}>
+                <LooksTwoOutlinedIcon></LooksTwoOutlinedIcon>
+              </GraphButton>
+              <label className={`base-class ${!showGraph2 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
+              >{graph2Name}</label>
             </div>
             <div className="graph-box-right__button-container">
-            <GraphButton className={`base-class ${showGraph3? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`} disabled={!showGraph3} variant="contained" onClick={() => displayGraph3()}>
-              <Looks3OutlinedIcon></Looks3OutlinedIcon>
-            </GraphButton>
-            <label className={`base-class ${!showGraph3? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
-            >{graph3Name}</label>
+              <GraphButton className={`base-class ${showGraph3 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`} disabled={!showGraph3} variant="contained" onClick={() => displayGraph3()}>
+                <Looks3OutlinedIcon></Looks3OutlinedIcon>
+              </GraphButton>
+              <label className={`base-class ${!showGraph3 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
+              >{graph3Name}</label>
             </div>
           </div>
           {graph != "null" &&
