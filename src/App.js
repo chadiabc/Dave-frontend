@@ -7,22 +7,15 @@ import dagre from 'cytoscape-dagre';
 import { useRef } from "react";
 import { Button, Typography, AppBar, Toolbar, createTheme, ThemeProvider, FormGroup, Stack, Switch } from "@mui/material";
 import ColorButton from "./styledButtons";
+import SideButton from "./sideButtonStyle";
+import GraphButton from "./graphButtonStyle";
+import StyledSwitch from "./StyledSwitch";
+import StickyNote2OutlinedIcon from '@mui/icons-material/StickyNote2Outlined';
+import LooksOneOutlinedIcon from '@mui/icons-material/LooksOneOutlined';
+import LooksTwoOutlinedIcon from '@mui/icons-material/LooksTwoOutlined';
+import Looks3OutlinedIcon from '@mui/icons-material/Looks3Outlined';
 
 cytoscape.use(dagre);
-
-
-
-
-const theme = createTheme({
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-        },
-      },
-    },
-  },
-});
 
 
 const layoutdagre = {
@@ -105,23 +98,35 @@ const cytoscapeStylesheet = [
       'display': "none",
 
     },
+  },
+  {
+    selector: ".hide",
+    css: {
+      'display': "none",
 
-
+    },
   }
 
 ]
 
-var SERVER_URL = "http://192.168.1.110:5000"
+
+var SERVER_URL = "http://127.0.0.1:5000" 
 
 
 function App() {
   let [Notes, setNotes] = useState("");
   let [showText, setShowText] = useState(true);
+  let [showGraph1, setShowGraph1] = useState(false);
+  let [showGraph2, setShowGraph2] = useState(true);
+  let [showGraph3, setShowGraph3] = useState(true);
+  let [graph1Name, setGraph1Name] = useState("algo 1 name");
+  let [graph2Name, setGraph2Name] = useState("algo 2 name");
+  let [graph3Name, setGraph3Name] = useState("algo 3 name");
+  let [datar,setDatar] = useState("null");
   const [disableVisNow, setDisable] = React.useState(false);
   const [show, setShow] = useState(false);
   const [graph, setGraph] = useState("null");
   const cytoRef = useRef(null)
-
 
   function getgraph() {
     fetch(`${SERVER_URL}/getgraph`)
@@ -133,7 +138,36 @@ function App() {
       });
   }
 
+  function displayGraph1() {
+    setShowGraph1(false);
+    setShowGraph2(true);
+    setShowGraph3(true);
+    console.log(graph);
+    console.log(graph);
+    CytoEvent(datar.elementss,datar.topNode);
+    
 
+    //show graph 1
+  }
+  function displayGraph2() {
+    setShowGraph1(true);
+    setShowGraph2(false);
+    setShowGraph3(true);
+    console.log(graph);
+    console.log(graph);
+    CytoEvent(datar.elementss1,datar.topNode1);
+    //show graph 2
+  }
+  function displayGraph3() {
+    setShowGraph1(true);
+    setShowGraph2(true);
+    setShowGraph3(false);
+    console.log(graph);
+    console.log(graph);
+    CytoEvent(datar.elementss2,datar.topNode2);
+
+    //show graph 3
+  }
 
 
   function checkKeyChanged(e) {
@@ -144,24 +178,59 @@ function App() {
 
       }
   }
+
   function visualizeNow() {
     console.log(Notes);
     postData(`${SERVER_URL}/AddnoteNow`, { text: Notes });
   }
+  function CytoEvent(elements,topNode){
+
+    useEffect(() => {  setGraph(elements) }, [])
+    cytoRef.current.layout(layoutdagre).run();
+
+    // cytoRef.current.nodes(topNode).style('background-color', '#00ffff');
+
+    // var myNode1 = cytoRef.current.nodes('[id="A3"]')[0];
+    // var myNode2 = cytoRef.current.nodes('[id="A12"]')[0];
+    // var level3Nodes = cytoRef.current.nodes('[type="3"]');
+
+    // myNode1.style('background-color', '#ffb6c1');
+    // myNode2.style('background-color', '#ffb6c1');
+    // myNode1.successors().addClass('collapsedchild');
+    // myNode2.successors().addClass('collapsedchild');
+    // cytoRef.current.zoomingEnabled(true);
+ 
+
+    // cytoRef.current.on('click', 'node', function (evt) {
+    //   var targetNode = cytoRef.current.nodes("[id = '" + evt.target.data().id + "']");
+    //   console.log(evt.target.data().id)
+    //   cytoRef.current.animate({
+    //     fit: {
+    //       eles: targetNode,
+    //       padding: 20
+    //     }
+    //   },
+    //     {
 
 
+    //       duration: 350
+    //     });
+    // });
 
+    // myNode1.on('tap', function (evt) {
+    //   myNode1.successors().toggleClass("collapsedchild");
 
+    // });
+    // myNode2.on('tap', function (evt) {
+    //   myNode2.successors().toggleClass("collapsedchild");
+    // });
+    // cytoRef.current.on('click', 'node', function (evt) {
+    //   var targetNode = cytoRef.current.nodes("[id = '" + evt.target.data().id + "']");
+    // })
 
-  function visualizeNowModefunction() {
-    console.log("at the end");
-    setDisable(true)
   }
+  
 
-  function visualizeContinouslyModefunction() {
-    console.log("dynamic");
-    setDisable(false)
-  }
   function FromEPIC() {
     fetch(`${SERVER_URL}/getnoteepic`)
       .then(response => response.json())
@@ -170,7 +239,6 @@ function App() {
 
       });
   }
-
 
   function resetData() {
     reset(`${SERVER_URL}/reset`);
@@ -191,8 +259,6 @@ function App() {
     setGraph("null");
   }
 
-
-
   async function postData(url = '', data = {}) {
     const response = await fetch(url, {
 
@@ -202,98 +268,85 @@ function App() {
       },
       body: JSON.stringify(data)
     })
-    setGraph("null");
-    const datar = await response.json();
-    setGraph(datar.elementss);
 
-    cytoRef.current.nodes(datar.topNode).style('background-color', '#00ffff');
-
-    var myNode1 = cytoRef.current.nodes('[id="A3"]')[0];
-    var myNode2 = cytoRef.current.nodes('[id="A12"]')[0];
-    var level3Nodes = cytoRef.current.nodes('[type="3"]');
-    myNode1.style('background-color', '#ffb6c1');
-    myNode2.style('background-color', '#ffb6c1');
-    myNode1.successors().addClass('collapsedchild');
-    myNode2.successors().addClass('collapsedchild');
-    cytoRef.current.zoomingEnabled(true);
-
-    cytoRef.current.on('click', 'node', function (evt) {
-      var targetNode = cytoRef.current.nodes("[id = '" + evt.target.data().id + "']");
-      console.log(evt.target.data().id)
-      cytoRef.current.animate({
-        fit: {
-          eles: targetNode,
-          padding: 20
-        }
-      },
-        {
-
-          duration: 350
-        });
-    });
-
-    myNode1.on('tap', function (evt) {
-      myNode1.successors().toggleClass("collapsedchild");
-
-    });
-    myNode2.on('tap', function (evt) {
-      myNode2.successors().toggleClass("collapsedchild");
-    });
-     cytoRef.current.on('click', 'node', function (evt) {
-      var targetNode = cytoRef.current.nodes("[id = '" + evt.target.data().id + "']");
-     })
+    const datarTemp = await response.json();
+    setDatar(datarTemp);
+    if (datarTemp.elementss !== "Stall") {
+      setGraph1Name(datarTemp.Name);
+      if (datarTemp.Name !== graph1Name)
+          CytoEvent(datarTemp.elementss,datarTemp.Name,datarTemp.topNode)
+          setGraph2Name(datarTemp.Name1)
+          setGraph3Name(datarTemp.Name2)
 
   }
-
+}
   return (
     <div className="App">
       <AppBar position="static">
         <Toolbar classes={{ root: "nav" }}>
-          <Button style={{ backgroundColor: '#800080' }} variant="contained" onClick={FromEPIC} >From EPIC</Button>
-          {/* <div className="text-switch"> */}
-          <FormGroup>
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    {/* <Typography>Hide Note</Typography> */}
-                    <Switch defaultChecked onChange={() =>setShowText(!showText)} inputProps={{ 'aria-label': 'ant design' }} />
-                    <Typography>Show Note</Typography>
-                  </Stack>
-                </FormGroup>
-          {/* </div> */}
+          <Button style={{ backgroundColor: '#c4a35a' }} variant="contained" onClick={FromEPIC} >From EPIC</Button>
           <Typography style={{ textAlign: "center" }} variant="h5">DAVE</Typography>
           <div>
-            {/* <ThemeProvider theme={theme}> */}
             <div>
-              <Button className="test" style={{ backgroundColor: '#800080' }} variant="contained" onClick={() => cytoRef.current.reset()}>Reset Zoom</Button>
-              &nbsp;&nbsp;<Button style={{ backgroundColor: '#800080' }} variant="contained" onClick={resetData} >Clear</Button>
+              <Button className="test" style={{ backgroundColor: '#c4a35a' }} variant="contained" onClick={() => cytoRef.current.reset()}>Reset Zoom</Button>
+              &nbsp;&nbsp;<Button style={{ backgroundColor: ' #c4a35a' }} variant="contained" onClick={resetData} >Clear</Button>
             </div>
-            {/* </ThemeProvider> */}
           </div>
         </Toolbar>
       </AppBar>
       <div className="graphBox">
-        <div className="graphBoxLeft">
         {showText &&
-                      <div className="wrapper">
-                      <div>
-                        <Typography variant="h5">Write your notes here</Typography>
-                        <textarea id="clincalNotesTextField" name="clincalNotesTextField" rows="15" cols="100"
-                          value={Notes} onChange={e => setNotes(e.target.value)} onKeyPress={(e) => checkKeyChanged(e)}>
-                        </textarea>
-                        <ColorButton disabled={!disableVisNow} variant="contained" onClick={visualizeNow}>Visualize</ColorButton>&nbsp;
-                        <div className="height">
-                          <FormGroup>
-                            <Stack direction="row" spacing={1} alignItems="center">
-                              <Switch defaultChecked onChange={() =>setDisable(!disableVisNow)} inputProps={{ 'aria-label': 'ant design' }} />
-                              <Typography>Visualize Continously</Typography>
-                            </Stack>
-                          </FormGroup>
-                        </div>
-                      </div>
-                    </div>
-          }
-        </div>
+          <div className="graphBoxLeft">
+            <div className="wrapper">
+              <div className="graphBox-wrapper__clinical-notes__header">
+                <Typography variant="h5">Write your notes here</Typography>
+              </div>
+              <textarea id="clincalNotesTextField" name="clincalNotesTextField" rows="15" cols="100"
+                value={Notes} onChange={e => setNotes(e.target.value)} onKeyPress={(e) => checkKeyChanged(e)}>
+              </textarea>
+              <div className="graphBox-wrapper__clinical-notes__action-fields">
+                <FormGroup>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <Switch style={{ color: '#c4a35a' }} defaultChecked onChange={() => setDisable(!disableVisNow)} inputProps={{ 'aria-label': 'ant design' }} />
+                    <Typography>Visualize Continously</Typography>
+                  </Stack>
+                </FormGroup>
+                <ColorButton disabled={!disableVisNow} variant="contained" onClick={visualizeNow}>Visualize</ColorButton>
+              </div>
+            </div>
+          </div>
+        }
         <div className="graphBoxRight">
-          {graph != "null" &&
+          <div className="graph-box-right__open-note-button-container">
+            <SideButton className="graph-box-right__open-note-button" variant="contained" onClick={() => setShowText(!showText)}>
+              <StickyNote2OutlinedIcon></StickyNote2OutlinedIcon>
+            </SideButton>
+            <div className="graph-box-right__button-container">
+              <GraphButton className={`base-class ${showGraph1 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
+                disabled={!showGraph1} variant="contained" onClick={() => displayGraph1()}>
+                <LooksOneOutlinedIcon></LooksOneOutlinedIcon>
+              </GraphButton>
+              <label className={`base-class ${!showGraph1 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
+              >{graph1Name}</label>
+            </div>
+            <div className="graph-box-right__button-container">
+              <GraphButton className={`base-class ${showGraph2 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
+                disabled={!showGraph2} variant="contained" onClick={() => displayGraph2()}>
+                <LooksTwoOutlinedIcon></LooksTwoOutlinedIcon>
+              </GraphButton>
+              <label className={`base-class ${!showGraph2 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
+              >{graph2Name}</label>
+            </div>
+            <div className="graph-box-right__button-container">
+              <GraphButton className={`base-class ${showGraph3 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`} disabled={!showGraph3} variant="contained" onClick={() => displayGraph3()}>
+                <Looks3OutlinedIcon></Looks3OutlinedIcon>
+              </GraphButton>
+              <label className={`base-class ${!showGraph3 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
+              >{graph3Name}</label>
+            </div>
+          </div>
+          {graph != "null"
+          &&
             <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
               autoungrabify={true} userPanningEnabled={true} className="cyto"
               cy={ref => cytoRef.current = ref}
@@ -311,11 +364,3 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
-
-
