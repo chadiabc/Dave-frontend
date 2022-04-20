@@ -142,9 +142,13 @@ function App() {
     setShowGraph1(false);
     setShowGraph2(true);
     setShowGraph3(true);
-    console.log(graph);
-    console.log(graph);
-    CytoEvent(datar.elementss,datar.topNode);
+    cytoRef.current.nodes("[group='C']").addClass('hide');
+    cytoRef.current.nodes("[group='B']").addClass('hide');
+    var targetNodes = cytoRef.current.nodes("[group='A']")
+    targetNodes.removeClass('hide');
+    cytoRef.current.fit(targetNodes,20);
+
+    
     
 
     //show graph 1
@@ -153,18 +157,27 @@ function App() {
     setShowGraph1(true);
     setShowGraph2(false);
     setShowGraph3(true);
-    console.log(graph);
-    console.log(graph);
-    CytoEvent(datar.elementss1,datar.topNode1);
     //show graph 2
+    cytoRef.current.nodes("[group='A']").addClass('hide');
+    cytoRef.current.nodes("[group='C']").addClass('hide');
+    var targetNodes = cytoRef.current.nodes("[group='B']")
+    targetNodes.removeClass('hide');
+    cytoRef.current.fit(targetNodes,20);
+
   }
   function displayGraph3() {
     setShowGraph1(true);
     setShowGraph2(true);
     setShowGraph3(false);
-    console.log(graph);
-    console.log(graph);
-    CytoEvent(datar.elementss2,datar.topNode2);
+    cytoRef.current.nodes("[group='A']").addClass('hide');
+    cytoRef.current.nodes("[group='B']").addClass('hide');
+    var targetNodes = cytoRef.current.nodes("[group='C']")
+    targetNodes.removeClass('hide');
+    cytoRef.current.fit(targetNodes,20);
+
+
+
+  
 
     //show graph 3
   }
@@ -185,10 +198,13 @@ function App() {
   }
   function CytoEvent(elements,topNode){
 
-    useEffect(() => {  setGraph(elements) }, [])
-    cytoRef.current.layout(layoutdagre).run();
+    setGraph(elements);
 
-    // cytoRef.current.nodes(topNode).style('background-color', '#00ffff');
+    cytoRef.current.layout(layoutdagre).run();
+    cytoRef.current.nodes("[group='B']").addClass('hide');
+    cytoRef.current.nodes("[group='C']").addClass('hide');
+
+    cytoRef.current.nodes(topNode).style('background-color', '#00ffff');
 
     // var myNode1 = cytoRef.current.nodes('[id="A3"]')[0];
     // var myNode2 = cytoRef.current.nodes('[id="A12"]')[0];
@@ -270,11 +286,11 @@ function App() {
     })
 
     const datarTemp = await response.json();
-    setDatar(datarTemp);
     if (datarTemp.elementss !== "Stall") {
       setGraph1Name(datarTemp.Name);
       if (datarTemp.Name !== graph1Name)
-          CytoEvent(datarTemp.elementss,datarTemp.Name,datarTemp.topNode)
+          setGraph("null");
+          CytoEvent(datarTemp.elementss,datarTemp.topNode)
           setGraph2Name(datarTemp.Name1)
           setGraph3Name(datarTemp.Name2)
 
