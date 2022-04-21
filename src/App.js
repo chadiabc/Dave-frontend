@@ -248,8 +248,9 @@ function App() {
 
   function changeBook() {
     console.log(book);
-    postBook(`${SERVER_URL}/ChangeBook`, { Book: book });
     setBook(!book);
+    postBook(`${SERVER_URL}/ChangeBook`, { Book: book });
+    resetData()
   }
 
   async function postBook(url = '', data = {}) {
