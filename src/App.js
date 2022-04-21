@@ -122,6 +122,8 @@ function App() {
   let [graph1Name, setGraph1Name] = useState("algo 1 name");
   let [graph2Name, setGraph2Name] = useState("algo 2 name");
   let [graph3Name, setGraph3Name] = useState("algo 3 name");
+  let [graphNames, setGraphNames] = useState("");
+
   let [datar,setDatar] = useState("null");
   const [disableVisNow, setDisable] = React.useState(false);
   const [show, setShow] = useState(false);
@@ -142,14 +144,11 @@ function App() {
     setShowGraph1(false);
     setShowGraph2(true);
     setShowGraph3(true);
-    cytoRef.current.nodes("[group='C']").addClass('hide');
-    cytoRef.current.nodes("[group='B']").addClass('hide');
     var targetNodes = cytoRef.current.nodes("[group='A']")
     targetNodes.removeClass('hide');
     cytoRef.current.fit(targetNodes,20);
-
-    
-    
+    CytoEvent("A","B","C");
+    ExpandCollapse("A");
 
     //show graph 1
   }
@@ -158,24 +157,24 @@ function App() {
     setShowGraph2(false);
     setShowGraph3(true);
     //show graph 2
-    cytoRef.current.nodes("[group='A']").addClass('hide');
-    cytoRef.current.nodes("[group='C']").addClass('hide');
     var targetNodes = cytoRef.current.nodes("[group='B']")
     targetNodes.removeClass('hide');
     cytoRef.current.fit(targetNodes,20);
+    CytoEvent("B","A","C");
+    ExpandCollapse("B");
+  
+
 
   }
   function displayGraph3() {
     setShowGraph1(true);
     setShowGraph2(true);
     setShowGraph3(false);
-    cytoRef.current.nodes("[group='A']").addClass('hide');
-    cytoRef.current.nodes("[group='B']").addClass('hide');
     var targetNodes = cytoRef.current.nodes("[group='C']")
     targetNodes.removeClass('hide');
     cytoRef.current.fit(targetNodes,20);
-
-
+    CytoEvent("C","A","B");
+    ExpandCollapse("C");
 
   
 
@@ -196,53 +195,56 @@ function App() {
     console.log(Notes);
     postData(`${SERVER_URL}/AddnoteNow`, { text: Notes });
   }
-  function CytoEvent(elements,topNode){
+  function CytoEvent(Show,Hide1,Hide2){
+    
+    cytoRef.current.removeListener("click")
 
-    setGraph(elements);
+    cytoRef.current.nodes("[group='"+Hide1+"']").addClass('hide');
+    cytoRef.current.nodes("[group='"+Hide2+"']").addClass('hide');
 
-    cytoRef.current.layout(layoutdagre).run();
-    cytoRef.current.nodes("[group='B']").addClass('hide');
-    cytoRef.current.nodes("[group='C']").addClass('hide');
+    //cytoRef.current.nodes(topNode).style('background-color', '#00ffff');
 
-    cytoRef.current.nodes(topNode).style('background-color', '#00ffff');
+    var myNode1 = cytoRef.current.nodes("[id='"+Show+"3']");
+    var myNode2 = cytoRef.current.nodes("[id='"+Show+"4']");
+    var level3Nodes = cytoRef.current.nodes('[type="3"]');
 
-    // var myNode1 = cytoRef.current.nodes('[id="A3"]')[0];
-    // var myNode2 = cytoRef.current.nodes('[id="A12"]')[0];
-    // var level3Nodes = cytoRef.current.nodes('[type="3"]');
-
-    // myNode1.style('background-color', '#ffb6c1');
-    // myNode2.style('background-color', '#ffb6c1');
+    myNode1.style('background-color', '#ffb6c1');
+    myNode2.style('background-color', '#ffb6c1');
     // myNode1.successors().addClass('collapsedchild');
     // myNode2.successors().addClass('collapsedchild');
-    // cytoRef.current.zoomingEnabled(true);
- 
+    cytoRef.current.zoomingEnabled(true);
+    
+    cytoRef.current.on('click', 'node', function (evt) {
+      var targetNode = cytoRef.current.nodes("[id = '" + evt.target.data().id + "']");
+      console.log(evt.target.data().id)
+      cytoRef.current.animate({
+        fit: {
+          eles: targetNode,
+          padding: 20
+        }
+      },
+        {
+          duration: 350
+        });
+    });
 
-    // cytoRef.current.on('click', 'node', function (evt) {
-    //   var targetNode = cytoRef.current.nodes("[id = '" + evt.target.data().id + "']");
-    //   console.log(evt.target.data().id)
-    //   cytoRef.current.animate({
-    //     fit: {
-    //       eles: targetNode,
-    //       padding: 20
-    //     }
-    //   },
-    //     {
 
 
-    //       duration: 350
-    //     });
-    // });
+  }
 
-    // myNode1.on('tap', function (evt) {
-    //   myNode1.successors().toggleClass("collapsedchild");
+  function ExpandCollapse(Show){
+    var myNode1 = cytoRef.current.nodes("[id='"+Show+"3']");
+    var myNode2 = cytoRef.current.nodes("[id='"+Show+"4']");
 
-    // });
-    // myNode2.on('tap', function (evt) {
-    //   myNode2.successors().toggleClass("collapsedchild");
-    // });
-    // cytoRef.current.on('click', 'node', function (evt) {
-    //   var targetNode = cytoRef.current.nodes("[id = '" + evt.target.data().id + "']");
-    // })
+
+    myNode1.on('tap', function (evt) {
+      myNode1.successors().toggleClass('collapsedchild');
+    });
+    myNode2.on('tap', function (evt) {
+      myNode2.successors().toggleClass('collapsedchild');
+    });
+
+
 
   }
   
@@ -286,13 +288,19 @@ function App() {
     })
 
     const datarTemp = await response.json();
+
     if (datarTemp.elementss !== "Stall") {
-      setGraph1Name(datarTemp.Name);
-      if (datarTemp.Name !== graph1Name)
+      if (datarTemp.Names !== graphNames){
+          setGraphNames(datarTemp.Names)
           setGraph("null");
-          CytoEvent(datarTemp.elementss,datarTemp.topNode)
-          setGraph2Name(datarTemp.Name1)
-          setGraph3Name(datarTemp.Name2)
+          setGraph(datarTemp.elementss);
+          setGraph1Name(datarTemp.Name);
+          setGraph2Name(datarTemp.Name1);
+          setGraph3Name(datarTemp.Name2);
+          displayGraph1();
+          ExpandCollapse();
+
+      }
 
   }
 }
