@@ -15,8 +15,12 @@ import StickyNote2OutlinedIcon from '@mui/icons-material/StickyNote2Outlined';
 import LooksOneOutlinedIcon from '@mui/icons-material/LooksOneOutlined';
 import LooksTwoOutlinedIcon from '@mui/icons-material/LooksTwoOutlined';
 import Looks3OutlinedIcon from '@mui/icons-material/Looks3Outlined';
+import Looks4OutlinedIcon from '@mui/icons-material/Looks3Outlined';
+import Looks5OutlinedIcon from '@mui/icons-material/Looks3Outlined';
+import Looks6OutlinedIcon from '@mui/icons-material/Looks3Outlined';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 
 cytoscape.use(dagre);
 
@@ -447,8 +451,8 @@ function App() {
               </div>
 
             }
-            <GraphButton className={`base-class ${graph != "null" ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
-              disabled={graph === "null"} variant="contained" onClick={() => setMore(!more)}>
+            <GraphButton className={`base-class ${graph1 != "null" ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
+              disabled={graph1 === "null"} variant="contained" onClick={() => setMore(!more)}>
               {!more &&
                 <MoreHorizIcon></MoreHorizIcon>
               }
@@ -456,6 +460,12 @@ function App() {
                 <KeyboardArrowUpIcon></KeyboardArrowUpIcon>
               }
             </GraphButton>
+          </div>
+          <div className="graph-box-right__to-png-container">
+          <GraphButton className={`base-class ${graph1 != "null"  ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
+           disabled={graph1 === "null"} variant="contained" onClick={() => console.log("download")}>
+                    <ImageOutlinedIcon></ImageOutlinedIcon>
+                  </GraphButton>
           </div>
           {graph === "1" && graph1 != "null"
             &&

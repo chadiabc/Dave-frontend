@@ -33,29 +33,6 @@ body {
  background-color:#e5e5dc;
 }
 
-img {
-  max-height: 100%;
-  /* width: initial; */
-  max-width: 100%;
-  height: 593px;
-  width: 452px;
-  /* width: fit-content;
-  height: fit-content; */
-}
-.img-box {
-  width:100%;
-  height:100%;
-  display: flex;
-  flex-direction: row;
-  overflow: hidden;
-}
-
-.img-left{
-  margin: 0.5rem 0.5rem 0.5rem 0.5rem;
-  width: 100%;
-  height: 100%;
-}
-
 .graphBoxLeft {
   height: 100%;
   width: 40rem;
@@ -101,6 +78,14 @@ img {
 .graph-box-right__open-note-button-container {
   position: absolute;
   margin: 0.5rem;
+  width: 2rem;
+  z-index: 10;
+}
+
+.graph-box-right__to-png-container {
+  position: absolute;
+  margin: 0.5rem;
+  margin-left: 50rem;
   width: 2rem;
   z-index: 10;
 }
@@ -185,4 +170,28 @@ img {
   margin-left: 5px !important;
   opacity: 0.3;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+}
+
+
+img {
+  max-height: 100%;
+  /* width: initial; */
+  max-width: 100%;
+  height: 593px;
+  width: 452px;
+  /* width: fit-content;
+  height: fit-content; */
+}
+.img-box {
+  width:100%;
+  height:100%;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.img-left{
+  margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+  width: 100%;
+  height: 100%;
 }
