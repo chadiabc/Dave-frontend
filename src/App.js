@@ -338,26 +338,10 @@ function App() {
   }
   return (
     <div className="App">
-      { book === "null" &&
-      <div className="img-box">
-        <div className="img-left">
-        <img src={require('C:/Users/User/dave-repository/new/Dave-frontend/src/symptomToDiagnosis.jpg')} 
-              onClick={() => changeBook("1")} />
-              </div>
-              <div className="img-right">
-        <img src={require('C:/Users/User/dave-repository/new/Dave-frontend/src/patientHistory.jpg')} 
-              onClick={() => changeBook("2")} />
-        </div>
-        </div>
-      }
-      {book != "null" &&
-      <div>
       <AppBar position="static">
         <Toolbar classes={{ root: "nav" }}>
           <div>
             <Button style={{ backgroundColor: '#c4a35a' }} variant="contained" onClick={FromEPIC} >From EPIC</Button>
-            {/* <Button style={{ backgroundColor: '#c4a35a' }} disabled={book !="2"} variant="contained" onClick={changeBook} >Book1</Button>
-            <Button style={{ backgroundColor: '#c4a35a' }} disabled={book !="1"} variant="contained" onClick={changeBook} >Book2</Button> */}
             <Button style={{ backgroundColor: '#c4a35a' }}  variant="contained" onClick={() => setBook("showChooseBook")} >Change Book</Button>
           </div>
           <Typography style={{ textAlign: "center" }} variant="h5">DAVE</Typography>
@@ -369,6 +353,20 @@ function App() {
           </div>
         </Toolbar>
       </AppBar>
+      { book === "null" &&
+      <div className="img-box">
+        <div className="img-left">
+        <img src={require('C:/Users/User/dave-repository/new/Dave-frontend/src/symptomToDiagnosis.jpg')} 
+              onClick={() => changeBook("1")} />
+              </div>
+              <div className="img-left">
+        <img src={require('C:/Users/User/dave-repository/new/Dave-frontend/src/patientHistory.jpg')} 
+              onClick={() => changeBook("2")} />
+        </div>
+        </div>
+      }
+      {book != "null" &&
+      <div className="App">
       <UserCredentialsDialog open={book ==="showChooseBook"} onSubmit={(bookselected) => changeBook(bookselected)}
         onClose={() => setBook("hideChooseBook")}
         title={'Choose Book'} submitText={'submit'}></UserCredentialsDialog>
