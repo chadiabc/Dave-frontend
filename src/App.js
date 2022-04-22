@@ -9,6 +9,7 @@ import { Button, Typography, AppBar, Toolbar, createTheme, ThemeProvider, FormGr
 import ColorButton from "./styledButtons";
 import SideButton from "./sideButtonStyle";
 import GraphButton from "./graphButtonStyle";
+import UserCredentialsDialog from "./UserCredentialsDialog";
 import StyledSwitch from "./StyledSwitch";
 import StickyNote2OutlinedIcon from '@mui/icons-material/StickyNote2Outlined';
 import LooksOneOutlinedIcon from '@mui/icons-material/LooksOneOutlined';
@@ -139,7 +140,7 @@ function App() {
   let [Notes, setNotes] = useState("");
   let [showText, setShowText] = useState(true);
   let [more, setMore] = useState(false);
-  let [book, setBook] = useState(true);
+  let [book, setBook] = useState("null");
   let [showGraph1, setShowGraph1] = useState(false);
   let [showGraph2, setShowGraph2] = useState(false);
   let [showGraph3, setShowGraph3] = useState(false);
@@ -267,21 +268,21 @@ function App() {
     console.log("reset")
   }
 
-  function changeBook() {
-    console.log(book);
-    setBook(!book);
-    postBook(`${SERVER_URL}/ChangeBook`);
-    resetData()
+  function changeBook(bookselected) {
+    console.log(bookselected);
+    postBook(`${SERVER_URL}/ChangeBook` , { Book: bookselected });
+    setBook("hideChooseBook");
+    resetData();
   }
 
-  async function postBook(url = '') {
+  async function postBook(url = '', data = {}) {
     const response = await fetch(url, {
 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      // body: JSON.stringify(data)
+      body: JSON.stringify(data)
     })
     // const datar = await response.json();
     // setBook(datar.Book);
@@ -337,12 +338,27 @@ function App() {
   }
   return (
     <div className="App">
+      { book === "null" &&
+      <div className="img-box">
+        <div className="img-left">
+        <img src={require('C:/Users/User/dave-repository/new/Dave-frontend/src/symptomToDiagnosis.jpg')} 
+              onClick={() => changeBook("1")} />
+              </div>
+              <div className="img-right">
+        <img src={require('C:/Users/User/dave-repository/new/Dave-frontend/src/patientHistory.jpg')} 
+              onClick={() => changeBook("2")} />
+        </div>
+        </div>
+      }
+      {book != "null" &&
+      <div>
       <AppBar position="static">
         <Toolbar classes={{ root: "nav" }}>
           <div>
             <Button style={{ backgroundColor: '#c4a35a' }} variant="contained" onClick={FromEPIC} >From EPIC</Button>
-            <Button style={{ backgroundColor: '#c4a35a' }} disabled={book} variant="contained" onClick={changeBook} >Book1</Button>
-            <Button style={{ backgroundColor: '#c4a35a' }} disabled={!book} variant="contained" onClick={changeBook} >Book2</Button>
+            {/* <Button style={{ backgroundColor: '#c4a35a' }} disabled={book !="2"} variant="contained" onClick={changeBook} >Book1</Button>
+            <Button style={{ backgroundColor: '#c4a35a' }} disabled={book !="1"} variant="contained" onClick={changeBook} >Book2</Button> */}
+            <Button style={{ backgroundColor: '#c4a35a' }}  variant="contained" onClick={() => setBook("showChooseBook")} >Change Book</Button>
           </div>
           <Typography style={{ textAlign: "center" }} variant="h5">DAVE</Typography>
           <div>
@@ -353,6 +369,9 @@ function App() {
           </div>
         </Toolbar>
       </AppBar>
+      <UserCredentialsDialog open={book ==="showChooseBook"} onSubmit={(bookselected) => changeBook(bookselected)}
+        onClose={() => setBook("hideChooseBook")}
+        title={'Choose Book'} submitText={'submit'}></UserCredentialsDialog>
       <div className="graphBox">
         {showText &&
           <div className="graphBoxLeft">
@@ -466,6 +485,8 @@ function App() {
           }
         </div>
       </div>
+      </div>
+  }
     </div>
 
 
