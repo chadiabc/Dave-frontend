@@ -18,11 +18,11 @@ export default function UserCredentialsDialog({
             <div className="dialog-container">
                 <DialogTitle>{title}</DialogTitle>
                 <div className="img-box-pop-up">
-        <div className="img-left">
+        <div className="img-left-pop-up">
         <img  src={require('C:/Users/User/dave-repository/new/Dave-frontend/src/symptomToDiagnosis.jpg')} 
               onClick={() => setBookSelected("1")} />
               </div>
-              <div className="img-right">
+              <div className="img-left-pop-up">
         <img src={require('C:/Users/User/dave-repository/new/Dave-frontend/src/patientHistory.jpg')} 
               onClick={() => setBookSelected("2")} />
         </div>
