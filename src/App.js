@@ -47,9 +47,11 @@ const cytoscapeStylesheet = [
       width: "label",
       height: "label",
       padding: "20px",
-      shape: "rectangle",
+      shape: "round-rectangle",
       'text-wrap': 'wrap',
       label: 'My multiline\nlabel',
+      "border-width":1,
+      "border-opacity":2
 
     }
   },
@@ -95,6 +97,24 @@ const cytoscapeStylesheet = [
 
   },
   {
+    selector: "node[prefcolor]",
+    css: {
+      'background-color':'data(prefcolor)'
+
+    },
+  },
+  {
+    selector: "node[prefshape]",
+    css: {
+      width: "label",
+      height: "label",
+      padding: "20px",
+      shape: 'data(prefshape)',
+
+    },
+  },
+
+  {
     selector: ".collapsedchild",
     css: {
       'display': "none",
@@ -132,8 +152,9 @@ function App() {
   let [graph3, setGraph3] = useState("null");
   const [disableVisNow, setDisable] = React.useState(false);
   const [show, setShow] = useState(false);
-  let [graph, setGraph] = useState("5");
+  let [graph, setGraph] = useState("1");
   const cytoRef = useRef(null)
+  
 
   function displayGraph1() {
     setShowGraph1(false);
@@ -294,16 +315,14 @@ function App() {
     if (datarTemp.elementss !== "Stall") {
       setGraph1Name(datarTemp.Name);
       if (datarTemp.Name !== graph1Name) {
+        console.log(datarTemp.elementss)
         setGraph2Name(datarTemp.Name1);
         setGraph3Name(datarTemp.Name2);
         setShowGraph2(true);
         setShowGraph3(true);
-        setGraph1("null");
         setGraph1(datarTemp.elementss);
         setGraph2(datarTemp.elementss1);
         setGraph3(datarTemp.elementss2);
-        setGraph("1");
-        cytoRef.current.removeListener('click');
         CytoEvent();
 
       }
