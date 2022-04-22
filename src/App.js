@@ -188,7 +188,7 @@ function App() {
 
   useEffect(() => {
     if (cytoRef.current) {
-      CytoEvent()
+      CytoEvent();
     }
 
   }, [graph])
@@ -270,21 +270,21 @@ function App() {
   function changeBook() {
     console.log(book);
     setBook(!book);
-    postBook(`${SERVER_URL}/ChangeBook`, { Book: book });
+    postBook(`${SERVER_URL}/ChangeBook`);
     resetData()
   }
 
-  async function postBook(url = '', data = {}) {
+  async function postBook(url = '') {
     const response = await fetch(url, {
 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data)
+      // body: JSON.stringify(data)
     })
-    const datar = await response.json();
-    setBook(datar.Book);
+    // const datar = await response.json();
+    // setBook(datar.Book);
   }
 
   async function reset(url = '') {
@@ -296,8 +296,13 @@ function App() {
       },
       // body: JSON.stringify("RESET")
     })
-    const datar = await response.json();
-    setGraph("null");
+    setGraph("1");
+    setGraph1("null");
+    setGraph2("null");
+    setGraph3("null");
+    setShowGraph1(false);
+    setShowGraph2(false);
+    setShowGraph3(false);
   }
 
   async function postData(url = '', data = {}) {
@@ -320,9 +325,11 @@ function App() {
         setGraph3Name(datarTemp.Name2);
         setShowGraph2(true);
         setShowGraph3(true);
+        setGraph1("null");
         setGraph1(datarTemp.elementss);
         setGraph2(datarTemp.elementss1);
         setGraph3(datarTemp.elementss2);
+        setGraph("1");
         CytoEvent();
 
       }
@@ -423,8 +430,8 @@ function App() {
               </div>
 
             }
-            <GraphButton className={`base-class ${graph != "5" ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
-              disabled={graph === "5"} variant="contained" onClick={() => setMore(!more)}>
+            <GraphButton className={`base-class ${graph != "null" ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
+              disabled={graph === "null"} variant="contained" onClick={() => setMore(!more)}>
               {!more &&
                 <MoreHorizIcon></MoreHorizIcon>
               }
