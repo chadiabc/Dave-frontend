@@ -14,10 +14,12 @@
     "cytoscape": "^3.8.0",
     "cytoscape-dagre": "^2.4.0",
     "cytoscape-expand-collapse": "^4.1.0",
+    "file-saver": "^2.0.5",
     "react": "^17.0.2",
     "react-cytoscape": "^1.0.6",
     "react-cytoscapejs": "^1.2.1",
     "react-dom": "^17.0.2",
+    "react-router-dom": "^6.3.0",
     "react-scripts": "^2.1.3",
     "web-vitals": "^2.1.4"
   },

@@ -21,6 +21,7 @@ import Looks6OutlinedIcon from '@mui/icons-material/Looks3Outlined';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
+import { saveAs } from 'file-saver'
 
 cytoscape.use(dagre);
 
@@ -145,6 +146,7 @@ function App() {
   let [showText, setShowText] = useState(true);
   let [more, setMore] = useState(false);
   let [book, setBook] = useState("null");
+  let [bookChoice,setBookChoice] = useState("null");
   let [showGraph1, setShowGraph1] = useState(false);
   let [showGraph2, setShowGraph2] = useState(false);
   let [showGraph3, setShowGraph3] = useState(false);
@@ -183,6 +185,22 @@ function App() {
     setGraph("3");
     // CytoEvent();
   }
+  function ResetNames(){
+    setGraph1Name("");
+    setGraph2Name("");
+    setGraph3Name("");
+
+  }
+
+  function GetGraphName(){
+    if(showGraph1==false)
+      return graph1Name
+    if(showGraph2==false)
+      return graph2Name
+    if(showGraph3==false)
+      return graph3Name
+  }
+
 
   useEffect(() => {
     if (cytoRef.current) {
@@ -269,6 +287,7 @@ function App() {
   function resetData() {
     reset(`${SERVER_URL}/reset`);
     setNotes("");
+    ResetNames();
     console.log("reset")
   }
 
@@ -276,6 +295,7 @@ function App() {
     console.log(bookselected);
     postBook(`${SERVER_URL}/ChangeBook` , { Book: bookselected });
     setBook("hideChooseBook");
+    setBookChoice("Book"+bookselected);
     resetData();
   }
 
@@ -360,11 +380,11 @@ function App() {
       { book === "null" &&
       <div className="img-box">
         <div className="img-left">
-        <img src={require('C:/Users/User/dave-repository/new/Dave-frontend/src/symptomToDiagnosis.jpg')} 
+        <img src={require('./symptomToDiagnosis.jpg')} 
               onClick={() => changeBook("1")} />
               </div>
               <div className="img-left">
-        <img src={require('C:/Users/User/dave-repository/new/Dave-frontend/src/patientHistory.jpg')} 
+        <img src={require('./patientHistory.jpg')} 
               onClick={() => changeBook("2")} />
         </div>
         </div>
@@ -463,9 +483,9 @@ function App() {
           </div>
           <div className="graph-box-right__to-png-container">
           <GraphButton className={`base-class ${graph1 != "null"  ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
-           disabled={graph1 === "null"} variant="contained" onClick={() => console.log("download")}>
-                    <ImageOutlinedIcon></ImageOutlinedIcon>
-                  </GraphButton>
+           disabled={graph1 === "null"} variant="contained" onClick={() => saveAs("./PNGs/"+bookChoice+"/"+GetGraphName()+'.png',GetGraphName()+'.png')}>
+          </GraphButton>
+          
           </div>
           {graph === "1" && graph1 != "null"
             &&
