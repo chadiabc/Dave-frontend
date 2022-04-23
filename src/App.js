@@ -138,7 +138,7 @@ const cytoscapeStylesheet = [
 ]
 
 
-var SERVER_URL = "http://192.168.1.110:5000"
+var SERVER_URL = "http://127.0.0.1:5000"
 
 
 function App() {
@@ -328,6 +328,7 @@ function App() {
     setShowGraph1(false);
     setShowGraph2(false);
     setShowGraph3(false);
+    setShowText(true)
   }
 
   async function postData(url = '', data = {}) {
@@ -484,9 +485,10 @@ function App() {
           <div className="graph-box-right__to-png-container">
           <GraphButton className={`base-class ${graph1 != "null"  ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
            disabled={graph1 === "null"} variant="contained" onClick={() => saveAs("./PNGs/"+bookChoice+"/"+GetGraphName()+'.png',GetGraphName()+'.png')}>
+          <ImageOutlinedIcon></ImageOutlinedIcon>
           </GraphButton>
-          
           </div>
+
           {graph === "1" && graph1 != "null"
             &&
             <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
