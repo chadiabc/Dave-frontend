@@ -85,7 +85,7 @@ body {
 .graph-box-right__to-png-container {
   position: absolute;
   margin: 0.5rem;
-  margin-left: 40rem;
+  margin-left: 75rem;
   width: 2rem;
   z-index: 10;
 }

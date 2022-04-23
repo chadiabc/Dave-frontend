@@ -138,7 +138,7 @@ const cytoscapeStylesheet = [
 ]
 
 
-var SERVER_URL = "http://127.0.0.1:5000"
+var SERVER_URL = "http://192.168.1.110:5000"
 
 
 function App() {
