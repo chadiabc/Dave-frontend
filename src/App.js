@@ -61,8 +61,8 @@ const cytoscapeStylesheet = [
       shape: "round-rectangle",
       'text-wrap': 'wrap',
       label: 'My multiline\nlabel',
-      "border-width":1,
-      "border-opacity":2
+
+
 
     }
   },
@@ -74,7 +74,8 @@ const cytoscapeStylesheet = [
       "font-size": "12",
       color: "black",
       "text-halign": "center",
-      "text-valign": "center"
+      "text-valign": "center",
+      "box-shadow": "10px 5px 5px red",
     }
   },
   {
@@ -124,9 +125,38 @@ const cytoscapeStylesheet = [
 
     },
   },
+  {
+    selector: ".expandable",
+    css: {
+      "background-color":"#ffb6c1",
+      "box-shadow": "10px 5px 5px red",
+
+    },
+  },
 
   {
-    selector: ".collapsedchild",
+    selector: ".collapsedchild1",
+    css: {
+      'display': "none",
+
+    },
+  },
+  {
+    selector: ".collapsedchild2",
+    css: {
+      'display': "none",
+
+    },
+  },
+  {
+    selector: ".collapsedchild3",
+    css: {
+      'display': "none",
+
+    },
+  },
+  {
+    selector: ".collapsedchild4",
     css: {
       'display': "none",
 
@@ -139,6 +169,7 @@ const cytoscapeStylesheet = [
 
     },
   }
+
 
 ]
 
@@ -238,23 +269,40 @@ function App() {
   }
   function CytoEvent() {
 
-
     // cytoRef.current.removeListener('click');
     // cytoRef.current.nodes(topNode).style('background-color', '#00ffff');
-    var myNode1 = cytoRef.current.nodes('[id="A3"]')[0];
-    var myNode2 = cytoRef.current.nodes('[id="A7"]')[0];
-    var level3Nodes = cytoRef.current.nodes('[type="3"]');
+    // var myNode1 = cytoRef.current.nodes('[id="A3"]')[0];
+    // var myNode2 = cytoRef.current.nodes('[id="A7"]')[0];
+    // var level3Nodes = cytoRef.current.nodes('[type="3"]');
+    // myNode1.style('background-color', '#ffb6c1');
+    // myNode2.style('background-color', '#ffb6c1');
+    var AllNodes = cytoRef.current.nodes();
+    if (AllNodes.length>=3){
+    for(var nId=3; nId<AllNodes.length; nId=nId+3){
+      var RankedNodes = cytoRef.current.nodes("[rank='"+nId+"']");
+      var order = nId/3
+      RankedNodes.successors().addClass("collapsedchild"+order)
+      RankedNodes.addClass('expandable');
+    }
+  }
+    cytoRef.current.nodes().forEach(function(ele){
+        if(ele.hasClass('expandable')){
+          ele.on('tap', function (evt) {
+            var collapsed = ele.data('rank');
+            ele.successors().toggleClass("collapsedchild"+collapsed/3);
+            })
+        }
 
-    myNode1.style('background-color', '#ffb6c1');
-    myNode2.style('background-color', '#ffb6c1');
-    myNode1.successors().addClass('collapsedchild');
-    myNode2.successors().addClass('collapsedchild');
+    })
+  
+
+    // myNode1.successors().addClass('collapsedchild');
+    // myNode2.successors().addClass('collapsedchild');
     cytoRef.current.zoomingEnabled(true);
 
 
     cytoRef.current.on('click', 'node', function (evt) {
       var targetNode = cytoRef.current.nodes("[id = '" + evt.target.data().id + "']");
-      console.log(evt.target.data().id)
       cytoRef.current.animate({
         fit: {
           eles: targetNode,
@@ -268,16 +316,15 @@ function App() {
         });
     });
 
-    myNode1.on('tap', function (evt) {
-      myNode1.successors().toggleClass("collapsedchild");
 
-    });
-    myNode2.on('tap', function (evt) {
-      myNode2.successors().toggleClass("collapsedchild");
-    });
-    cytoRef.current.on('click', 'node', function (evt) {
-      var targetNode = cytoRef.current.nodes("[id = '" + evt.target.data().id + "']");
-    })
+
+    // });
+    // myNode2.on('tap', function (evt) {
+    //   myNode2.successors().toggleClass("collapsedchild");
+    // });
+    // cytoRef.current.on('click', 'node', function (evt) {
+    //   var targetNode = cytoRef.current.nodes("[id = '" + evt.target.data().id + "']");
+    // })
   }
 
 
