@@ -1,12 +1,11 @@
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
 import React, { useState } from "react";
 import "./UserCredentialsDialog.css";
 import { Card, CardMedia, CardActionArea, CardContent, Typography } from '@mui/material';
-import img from "./symptomToDiagnosis.jpg"
-import img1 from "./patientHistory.jpg"
+import img from "./symptomToDiagnosis.jpg";
+import img1 from "./patientHistory.jpg";
 
 export default function UserCredentialsDialog({
     open,
@@ -54,20 +53,10 @@ export default function UserCredentialsDialog({
                     </CardActionArea>
                 </Card>
                 </div>
-                {/* <div className="img-box-pop-up">
-        <div className="img-left-pop-up">
-        <img  src={require('./symptomToDiagnosis.jpg')} 
-              onClick={() => setBookSelected("1")} />
-              </div>
-              <div className="img-left-pop-up">
-        <img src={require('./patientHistory.jpg')} 
-              onClick={() => setBookSelected("2")} />
-        </div>
-        </div> */}
                 <Button
                     color="primary"
                     variant="contained"
-                    onClick={() => onSubmit(bookselected)}
+                    onClick={() => {onSubmit(bookselected);setBookSelected("")}}
                 >
                     {submitText}
                 </Button>
