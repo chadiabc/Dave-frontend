@@ -5,7 +5,11 @@ import CytoscapeComponent from 'react-cytoscapejs';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import { useRef } from "react";
-import { Button, Typography, AppBar, Toolbar, createTheme, ThemeProvider, FormGroup, Stack, Switch } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+import { Button, Typography, AppBar, Toolbar, createTheme, ThemeProvider, FormGroup, Stack, Switch,
+           Card, CardActionArea, CardMedia,CardContent, Slide, Dialog, IconButton} from "@mui/material";
+import img from "./symptomToDiagnosis.jpg";
+import img1 from "./patientHistory.jpg";
 import ColorButton from "./styledButtons";
 import SideButton from "./sideButtonStyle";
 import GraphButton from "./graphButtonStyle";
@@ -22,6 +26,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import { saveAs } from 'file-saver'
+import ToPNG from './topng';
 
 cytoscape.use(dagre);
 
@@ -176,7 +181,8 @@ function App() {
   let [Notes, setNotes] = useState("");
   let [showText, setShowText] = useState(true);
   let [more, setMore] = useState(false);
-  let [book, setBook] = useState("null");
+  let [openPNG, setOpenPNG] = useState(false)
+  let [book, setBook] = useState("showChooseBook");
   let [bookChoice,setBookChoice] = useState("null");
   let [showGraph1, setShowGraph1] = useState(false);
   let [showGraph2, setShowGraph2] = useState(false);
@@ -375,6 +381,7 @@ function App() {
     setShowGraph1(false);
     setShowGraph2(false);
     setShowGraph3(false);
+    setShowText(true)
   }
 
   async function postData(url = '', data = {}) {
@@ -407,12 +414,16 @@ function App() {
       }
     }
   }
+  const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
+
   return (
     <div className="App">
       <AppBar position="static">
         <Toolbar classes={{ root: "nav" }}>
           <div>
-            <Button style={{ backgroundColor: '#c4a35a' }} variant="contained" onClick={FromEPIC} >From EPIC</Button>
+            <Button style={{ color: '#c4a35a' }} variant="outlined" onClick={FromEPIC} >From EPIC</Button>
             <Button style={{ backgroundColor: '#c4a35a' }}  variant="contained" onClick={() => setBook("showChooseBook")} >Change Book</Button>
           </div>
           <Typography style={{ textAlign: "center" }} variant="h5">DAVE</Typography>
@@ -424,23 +435,36 @@ function App() {
           </div>
         </Toolbar>
       </AppBar>
-      { book === "null" &&
-      <div className="img-box">
-        <div className="img-left">
-        <img src={require('./symptomToDiagnosis.jpg')} 
-              onClick={() => changeBook("1")} />
-              </div>
-              <div className="img-left">
-        <img src={require('./patientHistory.jpg')} 
-              onClick={() => changeBook("2")} />
-        </div>
-        </div>
-      }
-      {book != "null" &&
-      <div className="App">
       <UserCredentialsDialog open={book ==="showChooseBook"} onSubmit={(bookselected) => changeBook(bookselected)}
         onClose={() => setBook("hideChooseBook")}
         title={'Choose Book'} submitText={'submit'}></UserCredentialsDialog>
+  {  openPNG &&
+        <Dialog 
+        fullScreen
+        open={openPNG}
+        onClose={() => setOpenPNG(false)}
+        TransitionComponent={Transition}
+      >
+        <AppBar sx={{ position: 'relative' }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={() => setOpenPNG(false)}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+            <Button autoFocus color="inherit" onClick={() => saveAs("./PNGs/"+bookChoice+"/"+GetGraphName()+'.png',GetGraphName()+'.png')}>
+              Save
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <div className="to-png-pop-up">
+        <img src={require("../public/PNGs/"+bookChoice+"/"+GetGraphName()+'.png')}/>
+        </div>
+      </Dialog>
+      }
       <div className="graphBox">
         {showText &&
           <div className="graphBoxLeft">
@@ -529,11 +553,12 @@ function App() {
             </GraphButton>
           </div>
           <div className="graph-box-right__to-png-container">
-          <GraphButton className={`base-class ${graph1 != "null"  ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
-           disabled={graph1 === "null"} variant="contained" onClick={() => saveAs("./PNGs/"+bookChoice+"/"+GetGraphName()+'.png',GetGraphName()+'.png')}>
+          <GraphButton className={`base-class ${graph1 != "null"  ? 'graph-box-right__to-png-buttons' : 'graph-box-right__to-png-buttons--disabled'}`}
+           disabled={graph1 === "null"} variant="contained" onClick={() => setOpenPNG(!openPNG)}>
+          <ImageOutlinedIcon></ImageOutlinedIcon>
           </GraphButton>
-          
           </div>
+
           {graph === "1" && graph1 != "null"
             &&
             <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
@@ -560,8 +585,6 @@ function App() {
           }
         </div>
       </div>
-      </div>
-  }
     </div>
 
 
