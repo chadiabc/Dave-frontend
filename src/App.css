@@ -75,9 +75,35 @@ body {
   min-width: 0 !important;
 }
 
+.graph-box-right__to-png-buttons {
+  height: 2rem;
+  width: 2rem;
+  margin: 0;
+  padding: 0;
+  min-width: 0 !important;
+}
+
+.graph-box-right__to-png-buttons--disabled {
+  height: 2rem;
+  width: 2rem;
+  background-color:#7e4528  !important;
+  color:white !important;
+  margin: 0;
+  padding: 0;
+  min-width: 0 !important;
+}
+
 .graph-box-right__open-note-button-container {
   position: absolute;
   margin: 0.5rem;
+  width: 2rem;
+  z-index: 10;
+}
+
+.graph-box-right__to-png-container {
+  position: absolute;
+  margin: 0.5rem;
+  right:0;
   width: 2rem;
   z-index: 10;
 }
@@ -162,4 +188,39 @@ body {
   margin-left: 5px !important;
   opacity: 0.3;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+}
+
+.img-box {
+  width:100%;
+  height:100%;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.img-left{
+  margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  margin-left: 10rem;
+  width: 100%;
+  height: 521px;
+  /* height: 100%; */
+}
+
+.img-left-selected{
+  border: 3px solid blue;
+  margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+  width:100%;
+  height:100%;
+}
+img {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.to-png-pop-up {
+  width: 100%;
+  height: 100%;
+  display: flex;
 }
