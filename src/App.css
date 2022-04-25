@@ -224,3 +224,8 @@ img {
   height: 100%;
 
 }
+
+.btn-class {
+  border: 1px solid white !important;
+  color: white !important;
+}

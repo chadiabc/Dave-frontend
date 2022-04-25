@@ -19,9 +19,9 @@ import StickyNote2OutlinedIcon from '@mui/icons-material/StickyNote2Outlined';
 import LooksOneOutlinedIcon from '@mui/icons-material/LooksOneOutlined';
 import LooksTwoOutlinedIcon from '@mui/icons-material/LooksTwoOutlined';
 import Looks3OutlinedIcon from '@mui/icons-material/Looks3Outlined';
-import Looks4OutlinedIcon from '@mui/icons-material/Looks3Outlined';
-import Looks5OutlinedIcon from '@mui/icons-material/Looks3Outlined';
-import Looks6OutlinedIcon from '@mui/icons-material/Looks3Outlined';
+import Looks4OutlinedIcon from '@mui/icons-material/Looks4Outlined';
+import Looks5OutlinedIcon from '@mui/icons-material/Looks5Outlined';
+import Looks6OutlinedIcon from '@mui/icons-material/Looks6Outlined';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
@@ -187,13 +187,23 @@ function App() {
   let [showGraph1, setShowGraph1] = useState(false);
   let [showGraph2, setShowGraph2] = useState(false);
   let [showGraph3, setShowGraph3] = useState(false);
+  let [showGraph4, setShowGraph4] = useState(false);
+  let [showGraph5, setShowGraph5] = useState(false);
+  let [showGraph6, setShowGraph6] = useState(false);
   let [graph1Name, setGraph1Name] = useState("");
   let [graph2Name, setGraph2Name] = useState("");
   let [graph3Name, setGraph3Name] = useState("");
-  let [datar, setDatar] = useState("null");
+  let [graph4Name, setGraph4Name] = useState("");
+  let [graph5Name, setGraph5Name] = useState("");
+  let [graph6Name, setGraph6Name] = useState("");
   let [graph1, setGraph1] = useState("null");
   let [graph2, setGraph2] = useState("null");
   let [graph3, setGraph3] = useState("null");
+  let [graph4, setGraph4] = useState("null");
+  let [graph5, setGraph5] = useState("null");
+  let [graph6, setGraph6] = useState("null");
+  let [datar, setDatar] = useState("null");
+  let [datarRest, setDatarRest] = useState("null");
   const [disableVisNow, setDisable] = React.useState(false);
   const [show, setShow] = useState(false);
   let [graph, setGraph] = useState("1");
@@ -204,6 +214,9 @@ function App() {
     setShowGraph1(false);
     setShowGraph2(true);
     setShowGraph3(true);
+    setShowGraph4(true);
+    setShowGraph5(true);
+    setShowGraph6(true);
     setGraph("1");
     // CytoEvent();
 
@@ -212,6 +225,9 @@ function App() {
     setShowGraph1(true);
     setShowGraph2(false);
     setShowGraph3(true);
+    setShowGraph4(true);
+    setShowGraph5(true);
+    setShowGraph6(true);
     setGraph("2");
     // CytoEvent();
   }
@@ -219,13 +235,50 @@ function App() {
     setShowGraph1(true);
     setShowGraph2(true);
     setShowGraph3(false);
+    setShowGraph4(true);
+    setShowGraph5(true);
+    setShowGraph6(true);
     setGraph("3");
     // CytoEvent();
   }
+  function displayGraph4() {
+    setShowGraph1(true);
+    setShowGraph2(true);
+    setShowGraph3(true);
+    setShowGraph4(false);
+    setShowGraph5(true);
+    setShowGraph6(true);
+    setGraph("4");
+    // CytoEvent();
+  }
+  function displayGraph5() {
+    setShowGraph1(true);
+    setShowGraph2(true);
+    setShowGraph3(true);
+    setShowGraph4(true);
+    setShowGraph5(false);
+    setShowGraph6(true);
+    setGraph("5");
+    // CytoEvent();
+  }
+  function displayGraph6() {
+    setShowGraph1(true);
+    setShowGraph2(true);
+    setShowGraph3(true);
+    setShowGraph4(true);
+    setShowGraph5(true);
+    setShowGraph6(false);
+    setGraph("6");
+    // CytoEvent();
+  }
+
   function ResetNames(){
     setGraph1Name("");
     setGraph2Name("");
     setGraph3Name("");
+    setGraph4Name("");
+    setGraph5Name("");
+    setGraph6Name("");
 
   }
 
@@ -236,6 +289,12 @@ function App() {
       return graph2Name
     if(showGraph3==false)
       return graph3Name
+    if(showGraph4==false)
+      return graph4Name
+    if(showGraph5==false)
+      return graph5Name
+    if(showGraph6==false)
+      return graph6Name
   }
 
 
@@ -261,6 +320,10 @@ function App() {
         postData(`${SERVER_URL}/Addnote`, { text: Notes })
 
       }
+  }
+
+  function getRestGraphs() {
+    postDataRest(`${SERVER_URL}/RestOfNotes`);
   }
 
   function visualizeNow() {
@@ -338,9 +401,24 @@ function App() {
   }
 
   function resetData() {
-    reset(`${SERVER_URL}/reset`);
+    setGraph("1");
+    setGraph1("null");
+    setGraph2("null");
+    setGraph3("null");
+    setGraph4("null");
+    setGraph5("null");
+    setGraph6("null");
+    setShowGraph1(false);
+    setShowGraph2(false);
+    setShowGraph3(false);
+    setShowGraph4(false);
+    setShowGraph5(false);
+    setShowGraph6(false);
+    setShowText(true);
     setNotes("");
     ResetNames();
+    setMore(false);
+    reset(`${SERVER_URL}/reset`);
     console.log("reset")
   }
 
@@ -374,14 +452,6 @@ function App() {
       },
       // body: JSON.stringify("RESET")
     })
-    setGraph("1");
-    setGraph1("null");
-    setGraph2("null");
-    setGraph3("null");
-    setShowGraph1(false);
-    setShowGraph2(false);
-    setShowGraph3(false);
-    setShowText(true)
   }
 
   async function postData(url = '', data = {}) {
@@ -414,6 +484,33 @@ function App() {
       }
     }
   }
+
+  async function postDataRest(url = '') {
+    const response = await fetch(url, {
+
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      // body: JSON.stringify(data)
+    })
+
+    const datarTemp = await response.json();
+    setDatarRest(datarTemp);
+    if (datarTemp.elementss !== "Stall") {
+      setGraph4Name(datarTemp.Name);
+      if (datarTemp.Name !== graph4Name) {
+        setGraph5Name(datarTemp.Name1);
+        setGraph6Name(datarTemp.Name2);
+        setShowGraph4(true);
+        setShowGraph5(true);
+        setShowGraph6(true);
+        setGraph4(datarTemp.elementss);
+        setGraph5(datarTemp.elementss1);
+        setGraph6(datarTemp.elementss2);
+      }
+    }
+  }
   const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
@@ -423,14 +520,14 @@ function App() {
       <AppBar position="static">
         <Toolbar classes={{ root: "nav" }}>
           <div>
-            <Button style={{ color: '#c4a35a' }} variant="outlined" onClick={FromEPIC} >From EPIC</Button>
-            <Button style={{ backgroundColor: '#c4a35a' }}  variant="contained" onClick={() => setBook("showChooseBook")} >Change Book</Button>
+            <Button className="btn-class" variant="outlined" onClick={FromEPIC} >From EPIC</Button>&nbsp;&nbsp;
+            <Button className="btn-class" variant="outlined" onClick={() => setBook("showChooseBook")} >Change Book</Button>
           </div>
           <Typography style={{ textAlign: "center" }} variant="h5">DAVE</Typography>
           <div>
             <div>
-              <Button style={{ backgroundColor: '#c4a35a' }} variant="contained" onClick={() => cytoRef.current.reset()}>Reset Zoom</Button>
-              &nbsp;&nbsp;<Button style={{ backgroundColor: ' #c4a35a' }} variant="contained" onClick={resetData} >Clear</Button>
+              <Button className="btn-class" variant="outlined" onClick={() => cytoRef.current.reset()}>Reset Zoom</Button>
+              &nbsp;&nbsp;<Button className="btn-class" variant="outlined" onClick={resetData} >Clear</Button>
             </div>
           </div>
         </Toolbar>
@@ -518,32 +615,32 @@ function App() {
             {more &&
               <div>
                 <div className="graph-box-right__button-container">
-                  <GraphButton className={`base-class ${showGraph3 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`} disabled={!showGraph3} variant="contained" onClick={() => displayGraph3()}>
-                    <Looks3OutlinedIcon></Looks3OutlinedIcon>
+                  <GraphButton className={`base-class ${showGraph4 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`} disabled={!showGraph4} variant="contained" onClick={() => displayGraph4()}>
+                    <Looks4OutlinedIcon></Looks4OutlinedIcon>
                   </GraphButton>
-                  <label className={`base-class ${!showGraph3 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
-                  >{graph3Name}</label>
+                  <label className={`base-class ${!showGraph4 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
+                  >{graph4Name}</label>
                 </div>
                 <div className="graph-box-right__button-container">
-                  <GraphButton className={`base-class ${showGraph3 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`} disabled={!showGraph3} variant="contained" onClick={() => displayGraph3()}>
-                    <Looks3OutlinedIcon></Looks3OutlinedIcon>
+                  <GraphButton className={`base-class ${showGraph5 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`} disabled={!showGraph5} variant="contained" onClick={() => displayGraph5()}>
+                    <Looks5OutlinedIcon></Looks5OutlinedIcon>
                   </GraphButton>
-                  <label className={`base-class ${!showGraph3 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
-                  >{graph3Name}</label>
+                  <label className={`base-class ${!showGraph5 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
+                  >{graph5Name}</label>
                 </div>
                 <div className="graph-box-right__button-container">
-                  <GraphButton className={`base-class ${showGraph3 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`} disabled={!showGraph3} variant="contained" onClick={() => displayGraph3()}>
-                    <Looks3OutlinedIcon></Looks3OutlinedIcon>
+                  <GraphButton className={`base-class ${showGraph6 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`} disabled={!showGraph6} variant="contained" onClick={() => displayGraph6()}>
+                    <Looks6OutlinedIcon></Looks6OutlinedIcon>
                   </GraphButton>
-                  <label className={`base-class ${!showGraph3 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
-                  >{graph3Name}</label>
+                  <label className={`base-class ${!showGraph6 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
+                  >{graph6Name}</label>
                 </div>
 
               </div>
 
             }
             <GraphButton className={`base-class ${graph1 != "null" ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
-              disabled={graph1 === "null"} variant="contained" onClick={() => setMore(!more)}>
+              disabled={graph1 === "null"} variant="contained" onClick={() => {setMore(!more);getRestGraphs()}}>
               {!more &&
                 <MoreHorizIcon></MoreHorizIcon>
               }
@@ -581,6 +678,30 @@ function App() {
               autoungrabify={true} userPanningEnabled={true} className="cyto"
               cy={ref => cytoRef.current = ref}
               elements={CytoscapeComponent.normalizeElements(graph3)} layout={layoutdagre}
+              stylesheet={cytoscapeStylesheet} />
+          }
+          {graph === "4"
+            &&
+            <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
+              autoungrabify={true} userPanningEnabled={true} className="cyto"
+              cy={ref => cytoRef.current = ref}
+              elements={CytoscapeComponent.normalizeElements(graph4)} layout={layoutdagre}
+              stylesheet={cytoscapeStylesheet} />
+          }
+          {graph === "5"
+            &&
+            <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
+              autoungrabify={true} userPanningEnabled={true} className="cyto"
+              cy={ref => cytoRef.current = ref}
+              elements={CytoscapeComponent.normalizeElements(graph5)} layout={layoutdagre}
+              stylesheet={cytoscapeStylesheet} />
+          }
+          {graph === "6"
+            &&
+            <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
+              autoungrabify={true} userPanningEnabled={true} className="cyto"
+              cy={ref => cytoRef.current = ref}
+              elements={CytoscapeComponent.normalizeElements(graph6)} layout={layoutdagre}
               stylesheet={cytoscapeStylesheet} />
           }
         </div>
