@@ -199,6 +199,17 @@ function App() {
     // myNode1.style('background-color', '#ffb6c1');
     // myNode2.style('background-color', '#ffb6c1');
     var AllNodes = cytoRef.current.nodes();
+    cytoRef.current.animate({
+      fit: {
+        eles: cytoRef.current.nodes("[rank='2']"),
+        padding: 20
+      }
+    },
+      {
+
+
+        duration: 350
+      });
     if (AllNodes.length>=3){
     for(var nId=3; nId<AllNodes.length; nId=nId+3){
       var RankedNodes = cytoRef.current.nodes("[rank='"+nId+"']");
