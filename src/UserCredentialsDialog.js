@@ -30,9 +30,6 @@ export default function UserCredentialsDialog({
                             alt="Symptom To Diagnosis"
                         />
                         <CardContent style={{ backgroundColor: '#c4a35a' }}>
-                            <Typography gutterBottom variant="h6" component="div">
-                                Book 1
-                            </Typography>
                         </CardContent>
                     </CardActionArea>
                 </Card>
@@ -46,9 +43,6 @@ export default function UserCredentialsDialog({
                             alt="Symptom To Diagnosis"
                         />
                         <CardContent height={"50px"} style={{ backgroundColor: '#c4a35a' }}>
-                            <Typography gutterBottom variant="h6" component="div">
-                               Book 2
-                            </Typography>
                         </CardContent>
                     </CardActionArea>
                 </Card>
