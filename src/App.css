@@ -229,3 +229,8 @@ img {
   border: 1px solid white !important;
   color: white !important;
 }
+
+.cyto-graph-container-dimensions {
+  width: 100% !important;
+  height: 100% !important;
+}

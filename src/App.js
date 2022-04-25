@@ -159,7 +159,10 @@ function App() {
 
   useEffect(() => {
     if (cytoRef.current) {
-      cytoRef.current.resize()
+      let cytoContainer = document.getElementsByClassName("__________cytoscape_container")[0];
+      cytoContainer.children[0].classList.add("cyto-graph-container-dimensions");
+      cytoRef.current.resize();
+      // cytoRef.current.container.classList.add("cyto-container-dimensions");
     }
 
   }, [showText])
