@@ -416,7 +416,7 @@ function App() {
         TransitionComponent={Transition}
       >
         <AppBar sx={{ position: 'relative' }}>
-          <Toolbar>
+          <Toolbar classes={{ root: "nav-png" }}>
             <IconButton
               edge="start"
               color="inherit"
@@ -425,7 +425,7 @@ function App() {
             >
               <CloseIcon />
             </IconButton>
-            <Button autoFocus color="inherit" onClick={() => saveAs("./PNGs/"+bookChoice+"/"+GetGraphName()+'.png',GetGraphName()+'.png')}>
+            <Button autoFocus variant="outlined" color="inherit" onClick={() => saveAs("./PNGs/"+bookChoice+"/"+GetGraphName()+'.png',GetGraphName()+'.png')}>
               Save
             </Button>
           </Toolbar>
