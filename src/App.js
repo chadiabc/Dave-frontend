@@ -35,11 +35,22 @@ import MedicationIcon from '@mui/icons-material/Medication';
 import MenuBookRoundedIcon from '@mui/icons-material/MenuBookRounded';
 import { saveAs } from 'file-saver'
 import ToPNG from './topng';
-import { layoutdagre } from './cytostyle';
-import { cytoscapeStylesheet } from './cytostyle';
 
+import {layoutdagre} from './cytostyle';
+import {cytoscapeStylesheet} from './cytostyle';
+import {layoutYesNo} from './cytostyle';
+// import {defaults} from './cytostyle';
+import coseBilkent from 'cytoscape-cose-bilkent';
+import contextMenus from 'cytoscape-context-menus';
+import 'cytoscape-context-menus/cytoscape-context-menus.css';
+// import popper from 'cytoscape-popper';
+// import tippy from 'tippy.js';
+// import 'tippy.js/dist/tippy.css';
+// import nodeHtmlLabel from "cytoscape-node-html-label";
+// cytoscape.use( popper );
+cytoscape.use(contextMenus);
 cytoscape.use(dagre);
-
+// nodeHtmlLabel(cytoscape);
 
 var SERVER_URL = "http://127.0.0.1:5000"
 
@@ -51,8 +62,8 @@ function App() {
   let [showText, setShowText] = useState(true);
   let [more, setMore] = useState(false);
   let [openPNG, setOpenPNG] = useState(false)
-  let [book, setBook] = useState("showChooseBook");
-  let [bookChoice, setBookChoice] = useState("null");
+  let [book, setBook] = useState("hideChooseBook");
+  let [bookChoice,setBookChoice] = useState("Book3");
   let [showGraph1, setShowGraph1] = useState(false);
   let [showGraph2, setShowGraph2] = useState(false);
   let [showGraph3, setShowGraph3] = useState(false);
@@ -77,19 +88,97 @@ function App() {
   let [graph4, setGraph4] = useState("null");
   let [graph5, setGraph5] = useState("null");
   let [graph6, setGraph6] = useState("null");
+  let [pop, setPop] = useState(true);
   let [datar, setDatar] = useState("null");
   let [datarRest, setDatarRest] = useState("null");
+  let [counter, setCounter] = useState(1);
   const [disableVisNow, setDisable] = React.useState(false);
   const [show, setShow] = useState(false);
   let [graph, setGraph] = useState("1");
-  const cytoRef = useRef(null)
 
 
   const interval = setInterval(function () {
     setStart(false);
-
   }, 2000);
+  
+  const cytoRef = useRef(null);
+  const ContextMenuRef = useRef(null)
+  let [TopNodeTemp, setTopNodeTemp] = useState(2);
+  let TopNodesTemp;
 
+  if (typeof cytoscape('core',contextMenus) === null) {
+    console.log("it is null")
+    contextMenus(cytoscape);
+  }
+
+  
+
+
+  const defaults = {
+
+    evtType: 'cxttap',
+    menuItems: [
+      {
+        id: "Accept",
+        content: "Accept",
+        image: {src: "./Accept.png", width: 12, height: 12, x: 6, y: 10},
+        selector: "node[TopNode='1']",
+        onClickFunction: function (event) {
+          console.log(event.target.data().id)
+        },
+        hasTrailingDivider: false
+      },
+      {
+        id: "Reject",
+        content: "Reject",
+        image: {src: "./Reject.png", width: 12, height: 12, x: 6, y: 10},
+        selector: "node[TopNode='1']",
+        onClickFunction: function (event) {
+          console.log("inside Reject " + TopNodeTemp);
+          event.target.removeClass("TopNodeGiven");
+          event.target.data("TopNode","0");
+          rejectNode();
+
+        },
+        hasTrailingDivider: false
+      }
+    ],
+    menuItemClasses: ["custom-menu-item", "custom-menu-item:hover"],
+    contextMenuClasses: ["custom-context-menu"]
+};
+
+function HandleContextMenu(){
+  if (cytoRef.current && counter!==3) {
+    if(ContextMenuRef.current===null){
+      ContextMenuRef.current = cytoRef.current.contextMenus(defaults)
+    }
+    else{
+      ContextMenuRef.current = null
+      ContextMenuRef.current = cytoRef.current.contextMenus(defaults)
+    }
+   }
+}
+
+
+async function rejectNode() {
+    const response = await fetch(`${SERVER_URL}/RejectNode`, {
+
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    // var TopNode = cytoRef.current.getElementById("A"+TopNodeTemp)
+    // console.log("inside reject Node " + TopNode.data('id'))
+    // TopNode.removeClass("TopNodeGiven")
+    // TopNode.data("TopNode","0")
+    const TopNodeReceived = await response.json();
+    setTopNodeTemp(TopNodeReceived.topNode[1]);
+    var countholder = counter + 1
+    setCounter(countholder)
+
+}
+  
 
   function displayGraph1() {
     setShowGraph1(false);
@@ -99,6 +188,7 @@ function App() {
     setShowGraph5(true);
     setShowGraph6(true);
     setGraph("1");
+
     // CytoEvent();
 
   }
@@ -120,6 +210,7 @@ function App() {
     setShowGraph5(true);
     setShowGraph6(true);
     setGraph("3");
+
     // CytoEvent();
   }
   function displayGraph4() {
@@ -162,6 +253,7 @@ function App() {
     setGraph6Name("");
 
   }
+  
 
   function GetGraphName() {
     if (showGraph1 == false)
@@ -190,11 +282,33 @@ function App() {
   }, [showText])
 
   useEffect(() => {
+    console.log('count' + counter)
+    if (counter === 3) {
+      if (ContextMenuRef.current){
+        ContextMenuRef.current.destroy()
+      }
+    
+    }
+
+  }, [counter])
+
+  useEffect(() => {
     if (cytoRef.current) {
       CytoEvent();
+      CytoStartEvent()
+      HandleContextMenu();
+      
     }
 
   }, [graph])
+
+  useEffect(() => {
+    if (cytoRef.current) {
+      CytoTopNodeEvent();
+    }
+
+  }, [TopNodeTemp])
+
 
 
   function checkKeyChanged(e) {
@@ -202,6 +316,12 @@ function App() {
       if (e.code === 'Space' || e.code === 'Enter') {
         console.log(Notes);
         postData(`${SERVER_URL}/Addnote`, { text: Notes })
+        if(more){
+          postDataRest(`${SERVER_URL}/RestOfNotes`);
+
+        }
+
+
 
       }
   }
@@ -209,21 +329,7 @@ function App() {
   function getRestGraphs() {
     postDataRest(`${SERVER_URL}/RestOfNotes`);
   }
-
-  function visualizeNow() {
-    console.log(Notes);
-    postData(`${SERVER_URL}/AddnoteNow`, { text: Notes });
-  }
-  function CytoEvent() {
-
-    // cytoRef.current.removeListener('click');
-    // cytoRef.current.nodes(topNode).style('background-color', '#00ffff');
-    // var myNode1 = cytoRef.current.nodes('[id="A3"]')[0];
-    // var myNode2 = cytoRef.current.nodes('[id="A7"]')[0];
-    // var level3Nodes = cytoRef.current.nodes('[type="3"]');
-    // myNode1.style('background-color', '#ffb6c1');
-    // myNode2.style('background-color', '#ffb6c1');
-    var AllNodes = cytoRef.current.nodes();
+  function CytoStartEvent(){
     cytoRef.current.animate({
       fit: {
         eles: cytoRef.current.nodes("[rank='2']"),
@@ -231,35 +337,139 @@ function App() {
       }
     },
       {
-
-
         duration: 350
       });
-    if (AllNodes.length >= 3) {
-      for (var nId = 3; nId < AllNodes.length; nId = nId + 3) {
-        var RankedNodes = cytoRef.current.nodes("[rank='" + nId + "']");
-        var order = nId / 3
-        RankedNodes.successors().addClass("collapsedchild" + order)
-        RankedNodes.addClass('expandable');
-      }
-    }
-    cytoRef.current.nodes().forEach(function (ele) {
-      if (ele.hasClass('expandable')) {
-        ele.on('tap', function (evt) {
-          var collapsed = ele.data('rank');
-          ele.successors().toggleClass("collapsedchild" + collapsed / 3);
-        })
-      }
 
+    
+  }
+
+  function visualizeNow() {
+    console.log(Notes);
+    postData(`${SERVER_URL}/AddnoteNow`, { text: Notes });
+  }
+
+  // function makeTippy(el){
+  //   var ref = el.popperRef();
+  //   var dummyDomEle = document.createElement('div');
+
+  //   var tip = tippy( dummyDomEle, {
+  //     getReferenceClientRect: ref.getBoundingClientRect,
+  //     trigger: 'manual', 
+  //     content: function(){
+  //       var div = document.createElement('div');
+
+  //       div.innerHTML = "right Click to Accept of Reject";
+
+  //       return div;
+  //     },
+  //     arrow: true,
+  //     placement: 'top',
+  //     hideOnClick: false,
+  //     sticky: "reference",
+  //     interactive: true,
+  //     followCursor: true,
+  //     appendTo: document.body
+  //   } );
+
+  //   return tip;
+  // };
+
+  function CytoTopNodeEvent(){
+
+    var TopNode = cytoRef.current.getElementById("A"+TopNodeTemp)
+    TopNode.addClass('TopNodeGiven');
+    cytoRef.current.getElementById("A"+TopNodeTemp).data("TopNode","1")
+    console.log("Inside CytoEventTopNode "+"[id='A"+TopNodeTemp+"']")
+    TopNode.predecessors().forEach(function(ele){
+      if(ele.hasClass('expandable')){
+        ele.successors().toggleClass('collapsedchild'+ele.data('rank')/3);
+      }
     })
+  
+
+    if(!cytoRef.current.destroyed()){
+      cytoRef.current.animate({
+        fit: {
+          eles: TopNode,
+          padding: 20
+        }
+      },
+        {
+          duration: 350
+        });
+      }
+  }
+  
+
+  function CytoEvent() {
+      // cytoRef.current.removeListener('cxttap');
+      // cytoRef.current.contextMenus(defaults);
+    // cytoRef.current.removeListener("click",Animate);
+    // cytoRef.current.removeListener("click",Expandable);
+
+    // cytoRef.current.nodes(topNode).style('background-color', '#00ffff');
+    // var myNode1 = cytoRef.current.nodes('[id="A3"]')[0];
+    // var myNode2 = cytoRef.current.nodes('[id="A7"]')[0];
+    // var level3Nodes = cytoRef.current.nodes('[type="3"]');
+    // myNode1.style('background-color', '#ffb6c1');
+    // myNode2.style('background-color', '#ffb6c1');
+    // var TopNode = cytoRef.current.getElementById('A1');
+    // var Tippy = makeTippy(TopNode)
+    // Tippy.show()
+    var AllNodes = cytoRef.current.nodes();
+    // cytoRef.current.animate({
+    //   fit: {
+    //     eles: cytoRef.current.nodes("[rank='2']"),
+    //     padding: 20
+    //   }
+    // },
+    //   {
 
 
+
+    //     duration: 350
+    //   });
+    if (AllNodes.length>=3){
+    for(var nId=3; nId<AllNodes.length; nId=nId+3){
+      var RankedNodes = cytoRef.current.nodes("[rank='"+nId+"']");
+      var order = nId/3
+      RankedNodes.successors().addClass("collapsedchild"+order)
+      RankedNodes.addClass('expandable');
+    }
+  }
+  // cytoRef.current.nodeHtmlLabel([
+  //   {
+  //     query: "node",
+  //     // cssClass: "cyNode",
+  //     valign: "center",
+  //     // halign: "left",
+  //     valignBox: "center",
+  //     // halignBox: "left",
+  //     tpl: (data) => {
+  //       return `<div class="cyNode">
+  //                <div class="goggleBtn">+</div>
+  //               </div>
+  //               `;
+  //     },
+  //   },
+  // ]);
+  var Expandable = function(ele){
+    if(ele.hasClass('expandable')){
+      ele.on('tap', function (evt) {
+        var collapsed = ele.data('rank');
+        ele.successors().toggleClass("collapsedchild"+collapsed/3);
+        })
+    }
+
+
+}
+  cytoRef.current.nodes().forEach(Expandable)
+    
     // myNode1.successors().addClass('collapsedchild');
     // myNode2.successors().addClass('collapsedchild');
-    cytoRef.current.zoomingEnabled(true);
+    // cytoRef.current.zoomingEnabled(true);
 
-
-    cytoRef.current.on('click', 'node', function (evt) {
+  var Animate = function (evt) {
       var targetNode = cytoRef.current.nodes("[id = '" + evt.target.data().id + "']");
       cytoRef.current.animate({
         fit: {
@@ -272,7 +482,8 @@ function App() {
 
           duration: 350
         });
-    });
+    }
+    cytoRef.current.on('click', 'node', Animate);
 
 
 
@@ -296,7 +507,10 @@ function App() {
   }
 
   function resetData() {
-    setGraph("1");
+    if (cytoRef.current){
+      cytoRef.current.destroy()
+    }
+    // setGraph("1");
     setGraph1("null");
     setGraph2("null");
     setGraph3("null");
@@ -314,6 +528,8 @@ function App() {
     ResetNames();
     setMore(false);
     reset(`${SERVER_URL}/reset`);
+      
+
     console.log("reset")
   }
 
@@ -362,21 +578,41 @@ function App() {
     const datarTemp = await response.json();
     setDatar(datarTemp);
     if (datarTemp.elementss !== "Stall") {
-      setGraph1Name(datarTemp.Name);
       if (datarTemp.Name !== graph1Name) {
-        console.log(datarTemp.elementss)
+        setGraph1Name(datarTemp.Name);
         setGraph2Name(datarTemp.Name1);
         setGraph3Name(datarTemp.Name2);
         setShowGraph2(true);
         setShowGraph3(true);
         setGraph1("null");
+        setGraph2("null");
+        setGraph3("null");
+        console.log("inside first postData TopNodeTemp Before "+TopNodeTemp)
+        
+        
+        console.log("inside first postData TopNodeTemp After "+TopNodeTemp)
+        console.log("inside first postData Received"+datarTemp.topNode[1])
         setGraph1(datarTemp.elementss);
         setGraph2(datarTemp.elementss1);
         setGraph3(datarTemp.elementss2);
+
         setGraph1Score(datarTemp.Score);
         setGraph2Score(datarTemp.Score1);
         setGraph3Score(datarTemp.Score2);
         setGraph("1");
+
+        
+      if (graph!=='1' &&  graph!=='2' && graph!=='3')
+          setGraph("1");
+      else
+          setGraph(graph)
+      
+        console.log("A"+TopNodeTemp)
+        console.log(cytoRef.current.getElementById("A"+TopNodeTemp).data("TopNode"))
+        cytoRef.current.getElementById("A"+TopNodeTemp).data("TopNode","1")
+        console.log(cytoRef.current.getElementById("A"+TopNodeTemp).data("TopNode"))
+        setTopNodeTemp(datarTemp.topNode[1])
+        HandleContextMenu();
         CytoEvent();
 
       }
@@ -403,6 +639,9 @@ function App() {
         setShowGraph4(true);
         setShowGraph5(true);
         setShowGraph6(true);
+        setGraph4("null");
+        setGraph5("null");
+        setGraph6("null");
         setGraph4(datarTemp.elementss);
         setGraph5(datarTemp.elementss1);
         setGraph6(datarTemp.elementss2);
@@ -578,7 +817,7 @@ function App() {
                 </ul>
               </div>
 
-              {graph === "1" && graph1 != "null"
+              {graph === "1" && && graph1!==null
                 &&
                 <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
                   autoungrabify={true} userPanningEnabled={true} className="cyto"
@@ -586,7 +825,7 @@ function App() {
                   elements={CytoscapeComponent.normalizeElements(graph1)} layout={layoutdagre}
                   stylesheet={cytoscapeStylesheet} />
               }
-              {graph === "2"
+              {graph === "2" && graph2!==null
                 &&
                 <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
                   autoungrabify={true} userPanningEnabled={true} className="cyto"
@@ -594,7 +833,7 @@ function App() {
                   elements={CytoscapeComponent.normalizeElements(graph2)} layout={layoutdagre}
                   stylesheet={cytoscapeStylesheet} />
               }
-              {graph === "3"
+              {graph === "3" && graph3!==null
                 &&
                 <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
                   autoungrabify={true} userPanningEnabled={true} className="cyto"
@@ -602,7 +841,7 @@ function App() {
                   elements={CytoscapeComponent.normalizeElements(graph3)} layout={layoutdagre}
                   stylesheet={cytoscapeStylesheet} />
               }
-              {graph === "4"
+              {graph === "4" && graph4!==null
                 &&
                 <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
                   autoungrabify={true} userPanningEnabled={true} className="cyto"
@@ -610,7 +849,7 @@ function App() {
                   elements={CytoscapeComponent.normalizeElements(graph4)} layout={layoutdagre}
                   stylesheet={cytoscapeStylesheet} />
               }
-              {graph === "5"
+              {graph === "5" && graph5!==null
                 &&
                 <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
                   autoungrabify={true} userPanningEnabled={true} className="cyto"
@@ -618,7 +857,7 @@ function App() {
                   elements={CytoscapeComponent.normalizeElements(graph5)} layout={layoutdagre}
                   stylesheet={cytoscapeStylesheet} />
               }
-              {graph === "6"
+              {graph === "6" && graph6!==null
                 &&
                 <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
                   autoungrabify={true} userPanningEnabled={true} className="cyto"
