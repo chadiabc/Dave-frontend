@@ -1,9 +1,12 @@
+
+
 export const layoutdagre = {
     name: "dagre",
     // other options
     padding: 5,
     idealEdgeLength: 10,
     edgeElasticity: 0.1,
+    nodeDimensionsIncludeLabels: true,
     spacingFactor: 1,
     fit: true,
     rankDir: "TB",
@@ -11,6 +14,13 @@ export const layoutdagre = {
     // animationDuration: 1000,
     ranker: 'network-simplex',
     animateFilter: function (node, i) { return true; },
+  
+  };
+
+export const layoutYesNo = {
+    name: 'dagre',
+    // other options
+    edgeWeight: function( edge ){ return 500; },
   
   };
   
@@ -28,8 +38,7 @@ export const cytoscapeStylesheet = [
         shape: "round-rectangle",
         'text-wrap': 'wrap',
         label: 'My multiline\nlabel',
-  
-  
+        "shadow-blur":"30px",
   
       }
     },
@@ -43,6 +52,9 @@ export const cytoscapeStylesheet = [
         "text-halign": "center",
         "text-valign": "center",
         "box-shadow": "10px 5px 5px red",
+
+
+
       }
     },
     {
@@ -76,6 +88,17 @@ export const cytoscapeStylesheet = [
   
     },
     {
+      selector: "node[type='YES/NO']",
+      style: {
+        "font-size": "12",
+        "text-background-color": "white",
+
+  
+        // "text-rotation": "autorotate"
+      }
+  
+    },
+    {
       selector: "node[prefcolor]",
       css: {
         'background-color':'data(prefcolor)'
@@ -96,7 +119,19 @@ export const cytoscapeStylesheet = [
       selector: ".expandable",
       css: {
         "background-color":"#ffb6c1",
-        "box-shadow": "10px 5px 5px red",
+        shape:"octagon",
+        "border-color": "red",
+        
+  
+      },
+    },
+    {
+      selector: ".TopNodeGiven",
+      css: {
+        "background-color":"#ADD8E6",
+        shape:"octagon",
+        "border-color": "red",
+        
   
       },
     },
@@ -140,3 +175,5 @@ export const cytoscapeStylesheet = [
   
   ];
 
+
+  
