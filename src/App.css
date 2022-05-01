@@ -16,6 +16,9 @@ body {
   height: 100%;
   position: relative;
   width: 100%;
+  --bg-color: hsl(49 37% 94%);
+  --typewriterSpeed: 1.5s;
+  --typewriterCharacters: 7;
   --primary-clr: #26495c;
   --background-clr : #e5e5dc;
   --graph-btns-clr : #c66b3d;
@@ -26,6 +29,8 @@ body {
   display: flex;
   height: 100%;
   flex-direction: column;
+  background-color: var(--background-clr);
+  overflow: hidden;
 }
 
 .graphBox {
@@ -224,9 +229,175 @@ img {
 .btn-class {
   border: 1px solid white !important;
   color: white !important;
+  
+  
+}
+.epic{
+  background-image: url("./epic-logo-no-pad-flat.png") !important;
+  width: 98px !important;
+  height: 36.5px !important;
+}
+.book{
+  width: 4rem !important;
+  height: 36.5px !important;
 }
 
 .cyto-graph-container-dimensions {
   width: 100% !important;
   height: 100% !important;
 }
+
+
+h1 {
+  font-size: clamp(5rem, 3vw + 1rem, 5rem);
+  position: relative;
+  font-family: "Source Code Pro", monospace;
+  position: relative;
+  width: max-content;
+  color:var(--primary-clr);
+  transform: translateY(20rem);
+  animation:fadeInUp 2s ease forwards;
+
+}
+/* h1::before,
+h1::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+h1::before {
+  background: var(--background-clr);
+
+  animation: typewriter var(--typewriterSpeed) 
+    steps(var(--typewriterCharacters)) 0.25s forwards;
+}
+
+h1::after {
+  width: 0.125em;
+  background: black;
+  animation-iteration-count: 3;
+  animation: typewriter var(--typewriterSpeed)
+      steps(var(--typewriterCharacters)) 0.25s forwards,
+    blink 750ms steps(var(--typewriterCharacters)) infinite;
+} */
+
+
+@keyframes typewriter {
+  to {
+    left: 100%;
+  }
+}
+
+@keyframes blink {
+  to {
+    background: transparent;
+  }
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animation {
+  /* justify-content: space-evenly; */
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.icon {
+  position: absolute;
+}
+
+/* .legend-box {
+  position: absolute;
+  right:0;
+  bottom: 0;
+  z-index: 10;
+} */
+
+.legend-flex {
+  display: flex;
+  flex-direction:column;
+    margin: 0.5rem;
+  position: absolute;
+  right:0;
+  bottom: 0;
+  z-index: 10;
+}
+.row-instance {
+  display: flex;
+  flex-direction:row;
+  white-space: nowrap;
+}
+ .legend-label {
+  align-self: center !important;
+  margin-left: 5px !important;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+ }
+
+
+ .legend {
+  padding: 1rem;
+  border: 1px solid black !important;
+  list-style: none;
+  font-size: 1rem;
+    color: #ccc;
+    background-color: #333;
+    /* box-shadow: 0 0 15px #000; */
+ }
+
+ li {
+  line-height: 2;
+  display: flex;
+  align-items: center;
+  height: 1.25em;
+  margin-bottom: 0.7em;
+  padding-left: 0.5em;
+  
+ }  
+li::before {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  margin-inline-end: .5rem;
+  border-width: 2px;
+  border-style: solid;
+}
+
+ .legend-circle li::before {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+  }
+
+.legend-square-exp-collapse::before {
+  color:black;
+  background-color: #ffb6c1;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 3px;
+  }
+
+.legend-rhombus::before {
+    color:black;
+    background-color: aqua;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 3px;
+    transform: rotate(45deg) scale(.85);
+  }
+  .legend-square-consideration::before {
+      color:black;
+      background-color: purple;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 3px;
+  }
