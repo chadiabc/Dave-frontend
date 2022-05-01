@@ -12,6 +12,9 @@ import {
 } from "@mui/material";
 import img from "./symptomToDiagnosis.jpg";
 import img1 from "./patientHistory.jpg";
+import svgDave from "./DAVE-3.svg";
+import svgText from "./DAVE-2.svg";
+import svgFig from "./DAVE-1.svg";
 import ColorButton from "./styledButtons";
 import SideButton from "./sideButtonStyle";
 import GraphButton from "./graphButtonStyle";
@@ -85,7 +88,7 @@ function App() {
   const interval = setInterval(function () {
     setStart(false);
 
-  }, 3000);
+  }, 2000);
 
 
   function displayGraph1() {
@@ -417,8 +420,7 @@ function App() {
     <div className="App">
       {start &&
         <div className="animation">
-          <h1>Dave...
-          </h1>
+          <img className="img-animation" src={svgDave}></img>
         </div>
       }
       {!start &&
@@ -429,7 +431,11 @@ function App() {
                 <Button className="btn-class epic" variant="outlined" onClick={FromEPIC} ></Button>&nbsp;&nbsp;
                 <Button className="btn-class book" variant="outlined" onClick={() => setBook("showChooseBook")} > <MenuBookRoundedIcon sx={{ fontSize: 30 }}></MenuBookRoundedIcon></Button>
               </div>
-              <Typography style={{ textAlign: "center" }} variant="h5">DAVE</Typography>
+              <div>
+              {/* <img className="img-title" src={svgDave}></img> */}
+              <img className="img-title" src={svgFig}></img>
+              <img className="img-text" src={svgText}></img>  
+              </div>
               <div>
                 <div>
                   <Button className="btn-class" variant="outlined" onClick={() => cytoRef.current.reset()}>Reset Zoom</Button>
@@ -565,8 +571,10 @@ function App() {
 
                 <ul className=" legend">
                   <li className="legend-rhombus"> Test </li>
-                  <li className="legend-square-exp-collapse">Expandable/Collapse </li>
+                  <li className="legend-square-exp-collapse">Expandable </li>
                   <li className="legend-square-consideration"> Con </li>
+                  <li className="legend-square-red">Expandable </li>
+                  <li className="legend-square-orange"> Con </li>
                 </ul>
               </div>
 

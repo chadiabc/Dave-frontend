@@ -213,6 +213,23 @@ body {
   flex-direction: row;
   overflow: hidden;
 }
+.img-animation {
+  width:90%;
+  height:90%;
+  /* margin-left: 65px; */
+  position: relative;
+  transform: translateY(25rem);
+  animation:fadeInUp 2s ease forwards;
+}
+.img-title {
+  width:64px;
+  height:64px;
+}
+.img-text {
+  width:100px;
+  height:64px;
+  margin-bottom: -3px;
+}
 
 img {
   max-height: 100%;
@@ -259,32 +276,6 @@ h1 {
   animation:fadeInUp 2s ease forwards;
 
 }
-/* h1::before,
-h1::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-
-h1::before {
-  background: var(--background-clr);
-
-  animation: typewriter var(--typewriterSpeed) 
-    steps(var(--typewriterCharacters)) 0.25s forwards;
-}
-
-h1::after {
-  width: 0.125em;
-  background: black;
-  animation-iteration-count: 3;
-  animation: typewriter var(--typewriterSpeed)
-      steps(var(--typewriterCharacters)) 0.25s forwards,
-    blink 750ms steps(var(--typewriterCharacters)) infinite;
-} */
-
 
 @keyframes typewriter {
   to {
@@ -346,11 +337,12 @@ h1::after {
 
  .legend {
   padding: 1rem;
-  border: 1px solid black !important;
+  /* border: 1px solid black !important; */
   list-style: none;
   font-size: 1rem;
-    color: #ccc;
-    background-color: #333;
+  color: black;
+  /* background-color: #333; */
+  background-color: transparent;
     /* box-shadow: 0 0 15px #000; */
  }
 
@@ -359,7 +351,7 @@ h1::after {
   display: flex;
   align-items: center;
   height: 1.25em;
-  margin-bottom: 0.7em;
+  margin-bottom: 0.3em;
   padding-left: 0.5em;
   
  }  
@@ -384,6 +376,20 @@ li::before {
     width: 1rem;
     height: 1rem;
     border-radius: 3px;
+  }
+  .legend-square-red::before {
+    color:black;
+    background-color: red;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 3px;
+  }
+  .legend-square-orange::before {
+    color:black;
+    background-color: orange;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 3px;
   }
 
 .legend-rhombus::before {
