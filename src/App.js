@@ -52,7 +52,7 @@ cytoscape.use(contextMenus);
 cytoscape.use(dagre);
 // nodeHtmlLabel(cytoscape);
 
-var SERVER_URL = "http://127.0.0.1:5000"
+var SERVER_URL = "https://davemr.herokuapp.com/"
 
 
 function App() {
@@ -95,16 +95,17 @@ function App() {
   const [disableVisNow, setDisable] = React.useState(false);
   const [show, setShow] = useState(false);
   let [graph, setGraph] = useState("1");
+  const cytoRef = useRef(null);
+  const ContextMenuRef = useRef(null)
+  let [TopNodeTemp, setTopNodeTemp] = useState(2);
+  let TopNodesTemp;
+
 
 
   const interval = setInterval(function () {
     setStart(false);
   }, 2000);
   
-  const cytoRef = useRef(null);
-  const ContextMenuRef = useRef(null)
-  let [TopNodeTemp, setTopNodeTemp] = useState(2);
-  let TopNodesTemp;
 
   if (typeof cytoscape('core',contextMenus) === null) {
     console.log("it is null")
@@ -523,6 +524,13 @@ async function rejectNode() {
     setShowGraph4(false);
     setShowGraph5(false);
     setShowGraph6(false);
+    setGraph1Score("");
+    setGraph2Score("");
+    setGraph3Score("");
+    setGraph4Score("");
+    setGraph5Score("");
+    setGraph6Score("");
+    
     setShowText(true);
     setNotes("");
     ResetNames();
@@ -657,222 +665,222 @@ async function rejectNode() {
 
   return (
     <div className="App">
-      {start &&
-        <div className="animation">
-          <img className="img-animation" src={svgDave}></img>
-        </div>
-      }
-      {!start &&
-        <div className="App">
-          <AppBar position="static">
-            <Toolbar classes={{ root: "nav" }}>
-              <div>
-                <Button className="btn-class epic" variant="outlined" onClick={FromEPIC} ></Button>&nbsp;&nbsp;
-                <Button className="btn-class book" variant="outlined" onClick={() => setBook("showChooseBook")} > <MenuBookRoundedIcon sx={{ fontSize: 30 }}></MenuBookRoundedIcon></Button>
-              </div>
-              <div>
-              {/* <img className="img-title" src={svgDave}></img> */}
-              <img className="img-title" src={svgFig}></img>
-              <img className="img-text" src={svgText}></img>  
-              </div>
-              <div>
-                <div>
-                  <Button className="btn-class" variant="outlined" onClick={() => cytoRef.current.reset()}>Reset Zoom</Button>
-                  &nbsp;&nbsp;<Button className="btn-class" variant="outlined" onClick={resetData} >Clear</Button>
-                </div>
-              </div>
-            </Toolbar>
-          </AppBar>
-          <UserCredentialsDialog open={book === "showChooseBook"} onSubmit={(bookselected) => changeBook(bookselected)}
-            onClose={() => setBook("hideChooseBook")}
-            title={'Choose Book'} submitText={'submit'}></UserCredentialsDialog>
-          {openPNG &&
-            <Dialog
-              fullScreen
-              open={openPNG}
-              onClose={() => setOpenPNG(false)}
-              TransitionComponent={Transition}
-            >
-              <AppBar sx={{ position: 'relative' }}>
-                <Toolbar classes={{ root: "nav-png" }}>
-                  <IconButton
-                    edge="start"
-                    color="inherit"
-                    onClick={() => setOpenPNG(false)}
-                    aria-label="close"
-                  >
-                    <CloseIcon />
-                  </IconButton>
-                  <Button autoFocus variant="outlined" color="inherit" onClick={() => saveAs("./PNGs/" + bookChoice + "/" + GetGraphName() + '.png', GetGraphName() + '.png')}>
-                    Save
-                  </Button>
-                </Toolbar>
-              </AppBar>
-              <div className="to-png-pop-up">
-                <img src={require("../public/PNGs/" + bookChoice + "/" + GetGraphName() + '.png')} />
-              </div>
-            </Dialog>
-          }
-          <div className="graphBox">
-            {showText &&
-              <div className="graphBoxLeft">
-                <div className="wrapper">
-                  <div className="graphBox-wrapper__clinical-notes__header">
-                    <Typography variant="h5">Write your notes here</Typography>
-                  </div>
-                  <textarea id="clincalNotesTextField" name="clincalNotesTextField" rows="15" cols="100"
-                    value={Notes} onChange={e => setNotes(e.target.value)} onKeyPress={(e) => checkKeyChanged(e)}>
-                  </textarea>
-                  <div className="graphBox-wrapper__clinical-notes__action-fields">
-                    <FormGroup>
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <Switch style={{ color: '#c4a35a' }} defaultChecked onChange={() => setDisable(!disableVisNow)} inputProps={{ 'aria-label': 'ant design' }} />
-                        <Typography>Visualize Continously</Typography>
-                      </Stack>
-                    </FormGroup>
-                    <ColorButton disabled={!disableVisNow} variant="contained" onClick={visualizeNow}>Visualize</ColorButton>
-                  </div>
-                </div>
-              </div>
-            }
-            <div className="graphBoxRight">
-              <div className="graph-box-right__open-note-button-container">
-                <SideButton className="graph-box-right__open-note-button" variant="contained" onClick={() => setShowText(!showText)}>
-                  <StickyNote2OutlinedIcon></StickyNote2OutlinedIcon>
-                </SideButton>
-                <div className="graph-box-right__button-container">
-                  <GraphButton className={`base-class ${showGraph1 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
-                    disabled={!showGraph1} variant="contained" onClick={() => displayGraph1()}>
-                    <LooksOneOutlinedIcon></LooksOneOutlinedIcon>
-                  </GraphButton>
-                  <label className={`base-class ${!showGraph1 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
-                  >{graph1Name} {graph1Score && ": "+graph1Score}</label>
-                </div>
-                <div className="graph-box-right__button-container">
-                  <GraphButton className={`base-class ${showGraph2 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
-                    disabled={!showGraph2} variant="contained" onClick={() => { displayGraph2() }}>
-                    <LooksTwoOutlinedIcon></LooksTwoOutlinedIcon>
-                  </GraphButton>
-                  <label className={`base-class ${!showGraph2 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
-                  >{graph2Name} {graph2Score && ": "+graph2Score}</label>
-                </div>
-                <div className="graph-box-right__button-container">
-                  <GraphButton className={`base-class ${showGraph3 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`} disabled={!showGraph3} variant="contained" onClick={() => displayGraph3()}>
-                    <Looks3OutlinedIcon></Looks3OutlinedIcon>
-                  </GraphButton>
-                  <label className={`base-class ${!showGraph3 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
-                  >{graph3Name} {graph3Score && ": "+graph3Score}</label>
-                </div>
-                {more &&
-                  <div>
-                    <div className="graph-box-right__button-container">
-                      <GraphButton className={`base-class ${showGraph4 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`} disabled={!showGraph4} variant="contained" onClick={() => displayGraph4()}>
-                        <Looks4OutlinedIcon></Looks4OutlinedIcon>
-                      </GraphButton>
-                      <label className={`base-class ${!showGraph4 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
-                      >{graph4Name} {graph4Score && ": "+graph4Score}</label>
-                    </div>
-                    <div className="graph-box-right__button-container">
-                      <GraphButton className={`base-class ${showGraph5 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`} disabled={!showGraph5} variant="contained" onClick={() => displayGraph5()}>
-                        <Looks5OutlinedIcon></Looks5OutlinedIcon>
-                      </GraphButton>
-                      <label className={`base-class ${!showGraph5 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
-                      >{graph5Name} {graph5Score && ": "+graph5Score}</label>
-                    </div>
-                    <div className="graph-box-right__button-container">
-                      <GraphButton className={`base-class ${showGraph6 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`} disabled={!showGraph6} variant="contained" onClick={() => displayGraph6()}>
-                        <Looks6OutlinedIcon></Looks6OutlinedIcon>
-                      </GraphButton>
-                      <label className={`base-class ${!showGraph6 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
-                      >{graph6Name} {graph6Score && ": "+graph6Score}</label>
-                    </div>
-
-                  </div>
-
-                }
-                <GraphButton className={`base-class ${graph1 != "null" ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
-                  disabled={graph1 === "null"} variant="contained" onClick={() => { setMore(!more); getRestGraphs() }}>
-                  {!more &&
-                    <MoreHorizIcon></MoreHorizIcon>
-                  }
-                  {more &&
-                    <KeyboardArrowUpIcon></KeyboardArrowUpIcon>
-                  }
-                </GraphButton>
-              </div>
-              <div className="graph-box-right__to-png-container">
-                <GraphButton className={`base-class ${graph1 != "null" ? 'graph-box-right__to-png-buttons' : 'graph-box-right__to-png-buttons--disabled'}`}
-                  disabled={graph1 === "null"} variant="contained" onClick={() => setOpenPNG(!openPNG)}>
-                  <ImageOutlinedIcon></ImageOutlinedIcon>
-                </GraphButton>
-              </div>
-              <div className="legend-flex">
-
-                <ul className=" legend">
-                  <li className="legend-rhombus"> Test </li>
-                  <li className="legend-square-exp-collapse">Expandable </li>
-                  <li className="legend-square-consideration"> Con </li>
-                  <li className="legend-square-red">Expandable </li>
-                  <li className="legend-square-orange"> Con </li>
-                </ul>
-              </div>
-
-              {graph === "1" && && graph1!==null
-                &&
-                <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
-                  autoungrabify={true} userPanningEnabled={true} className="cyto"
-                  cy={ref => cytoRef.current = ref}
-                  elements={CytoscapeComponent.normalizeElements(graph1)} layout={layoutdagre}
-                  stylesheet={cytoscapeStylesheet} />
-              }
-              {graph === "2" && graph2!==null
-                &&
-                <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
-                  autoungrabify={true} userPanningEnabled={true} className="cyto"
-                  cy={ref => cytoRef.current = ref}
-                  elements={CytoscapeComponent.normalizeElements(graph2)} layout={layoutdagre}
-                  stylesheet={cytoscapeStylesheet} />
-              }
-              {graph === "3" && graph3!==null
-                &&
-                <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
-                  autoungrabify={true} userPanningEnabled={true} className="cyto"
-                  cy={ref => cytoRef.current = ref}
-                  elements={CytoscapeComponent.normalizeElements(graph3)} layout={layoutdagre}
-                  stylesheet={cytoscapeStylesheet} />
-              }
-              {graph === "4" && graph4!==null
-                &&
-                <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
-                  autoungrabify={true} userPanningEnabled={true} className="cyto"
-                  cy={ref => cytoRef.current = ref}
-                  elements={CytoscapeComponent.normalizeElements(graph4)} layout={layoutdagre}
-                  stylesheet={cytoscapeStylesheet} />
-              }
-              {graph === "5" && graph5!==null
-                &&
-                <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
-                  autoungrabify={true} userPanningEnabled={true} className="cyto"
-                  cy={ref => cytoRef.current = ref}
-                  elements={CytoscapeComponent.normalizeElements(graph5)} layout={layoutdagre}
-                  stylesheet={cytoscapeStylesheet} />
-              }
-              {graph === "6" && graph6!==null
-                &&
-                <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
-                  autoungrabify={true} userPanningEnabled={true} className="cyto"
-                  cy={ref => cytoRef.current = ref}
-                  elements={CytoscapeComponent.normalizeElements(graph6)} layout={layoutdagre}
-                  stylesheet={cytoscapeStylesheet} />
-              }
+    {start &&
+      <div className="animation">
+        <img className="img-animation" src={svgDave}></img>
+      </div>
+    }
+    {!start &&
+      <div className="App">
+        <AppBar position="static">
+          <Toolbar classes={{ root: "nav" }}>
+            <div>
+              <Button className="btn-class epic" variant="outlined" onClick={FromEPIC} ></Button>&nbsp;&nbsp;
+              <Button className="btn-class book" variant="outlined" onClick={() => setBook("showChooseBook")} > <MenuBookRoundedIcon sx={{ fontSize: 30 }}></MenuBookRoundedIcon></Button>
             </div>
+            <div>
+            {/* <img className="img-title" src={svgDave}></img> */}
+            <img className="img-title" src={svgFig}></img>
+            <img className="img-text" src={svgText}></img>  
+            </div>
+            <div>
+              <div>
+                <Button className="btn-class" variant="outlined" onClick={() => cytoRef.current.reset()}>Reset Zoom</Button>
+                &nbsp;&nbsp;<Button className="btn-class" variant="outlined" onClick={resetData} >Clear</Button>
+              </div>
+            </div>
+          </Toolbar>
+        </AppBar>
+        <UserCredentialsDialog open={book === "showChooseBook"} onSubmit={(bookselected) => changeBook(bookselected)}
+          onClose={() => setBook("hideChooseBook")}
+          title={'Choose Book'} submitText={'submit'}></UserCredentialsDialog>
+        {openPNG &&
+          <Dialog
+            fullScreen
+            open={openPNG}
+            onClose={() => setOpenPNG(false)}
+            TransitionComponent={Transition}
+          >
+            <AppBar sx={{ position: 'relative' }}>
+              <Toolbar classes={{ root: "nav-png" }}>
+                <IconButton
+                  edge="start"
+                  color="inherit"
+                  onClick={() => setOpenPNG(false)}
+                  aria-label="close"
+                >
+                  <CloseIcon />
+                </IconButton>
+                <Button autoFocus variant="outlined" color="inherit" onClick={() => saveAs("./PNGs/" + bookChoice + "/" + GetGraphName() + '.png', GetGraphName() + '.png')}>
+                  Save
+                </Button>
+              </Toolbar>
+            </AppBar>
+            <div className="to-png-pop-up">
+              <img src={require("../public/PNGs/" + bookChoice + "/" + GetGraphName() + '.png')} />
+            </div>
+          </Dialog>
+        }
+        <div className="graphBox">
+          {showText &&
+            <div className="graphBoxLeft">
+              <div className="wrapper">
+                <div className="graphBox-wrapper__clinical-notes__header">
+                  <Typography variant="h5">Write your notes here</Typography>
+                </div>
+                <textarea id="clincalNotesTextField" name="clincalNotesTextField" rows="15" cols="100"
+                  value={Notes} onChange={e => setNotes(e.target.value)} onKeyPress={(e) => checkKeyChanged(e)}>
+                </textarea>
+                <div className="graphBox-wrapper__clinical-notes__action-fields">
+                  <FormGroup>
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <Switch style={{ color: '#c4a35a' }} defaultChecked onChange={() => setDisable(!disableVisNow)} inputProps={{ 'aria-label': 'ant design' }} />
+                      <Typography>Visualize Continuously</Typography>
+                    </Stack>
+                  </FormGroup>
+                  <ColorButton disabled={!disableVisNow} variant="contained" onClick={visualizeNow}>Visualize</ColorButton>
+                </div>
+              </div>
+            </div>
+          }
+          <div className="graphBoxRight">
+            <div className="graph-box-right__open-note-button-container">
+              <SideButton className="graph-box-right__open-note-button" variant="contained" onClick={() => setShowText(!showText)}>
+                <StickyNote2OutlinedIcon></StickyNote2OutlinedIcon>
+              </SideButton>
+              <div className="graph-box-right__button-container">
+                <GraphButton className={`base-class ${showGraph1 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
+                  disabled={!showGraph1} variant="contained" onClick={() => displayGraph1()}>
+                  <LooksOneOutlinedIcon></LooksOneOutlinedIcon>
+                </GraphButton>
+                <label className={`base-class ${!showGraph1 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
+                >{graph1Name} {graph1Score && ": "+graph1Score}</label>
+              </div>
+              <div className="graph-box-right__button-container">
+                <GraphButton className={`base-class ${showGraph2 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
+                  disabled={!showGraph2} variant="contained" onClick={() => { displayGraph2() }}>
+                  <LooksTwoOutlinedIcon></LooksTwoOutlinedIcon>
+                </GraphButton>
+                <label className={`base-class ${!showGraph2 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
+                >{graph2Name} {graph2Score && ": "+graph2Score}</label>
+              </div>
+              <div className="graph-box-right__button-container">
+                <GraphButton className={`base-class ${showGraph3 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`} disabled={!showGraph3} variant="contained" onClick={() => displayGraph3()}>
+                  <Looks3OutlinedIcon></Looks3OutlinedIcon>
+                </GraphButton>
+                <label className={`base-class ${!showGraph3 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
+                >{graph3Name} {graph3Score && ": "+graph3Score}</label>
+              </div>
+              {more &&
+                <div>
+                  <div className="graph-box-right__button-container">
+                    <GraphButton className={`base-class ${showGraph4 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`} disabled={!showGraph4} variant="contained" onClick={() => displayGraph4()}>
+                      <Looks4OutlinedIcon></Looks4OutlinedIcon>
+                    </GraphButton>
+                    <label className={`base-class ${!showGraph4 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
+                    >{graph4Name} {graph4Score && ": "+graph4Score}</label>
+                  </div>
+                  <div className="graph-box-right__button-container">
+                    <GraphButton className={`base-class ${showGraph5 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`} disabled={!showGraph5} variant="contained" onClick={() => displayGraph5()}>
+                      <Looks5OutlinedIcon></Looks5OutlinedIcon>
+                    </GraphButton>
+                    <label className={`base-class ${!showGraph5 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
+                    >{graph5Name} {graph5Score && ": "+graph5Score}</label>
+                  </div>
+                  <div className="graph-box-right__button-container">
+                    <GraphButton className={`base-class ${showGraph6 ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`} disabled={!showGraph6} variant="contained" onClick={() => displayGraph6()}>
+                      <Looks6OutlinedIcon></Looks6OutlinedIcon>
+                    </GraphButton>
+                    <label className={`base-class ${!showGraph6 ? 'graph-box-right__button-container__label' : 'graph-box-right__button-container__label--disabled'}`}
+                    >{graph6Name} {graph6Score && ": "+graph6Score}</label>
+                  </div>
+
+                </div>
+
+              }
+              <GraphButton className={`base-class ${graph1 != "null" ? 'graph-box-right__graph-buttons' : 'graph-box-right__graph-buttons--disabled'}`}
+                disabled={graph1 === "null"} variant="contained" onClick={() => { setMore(!more); getRestGraphs() }}>
+                {!more &&
+                  <MoreHorizIcon></MoreHorizIcon>
+                }
+                {more &&
+                  <KeyboardArrowUpIcon></KeyboardArrowUpIcon>
+                }
+              </GraphButton>
+            </div>
+            <div className="graph-box-right__to-png-container">
+              <GraphButton className={`base-class ${graph1 != "null" ? 'graph-box-right__to-png-buttons' : 'graph-box-right__to-png-buttons--disabled'}`}
+                disabled={graph1 === "null"} variant="contained" onClick={() => setOpenPNG(!openPNG)}>
+                <ImageOutlinedIcon></ImageOutlinedIcon>
+              </GraphButton>
+            </div>
+            <div className="legend-flex">
+
+              <ul className=" legend">
+                <li className="legend-rhombus"> Top Node </li>
+                <li className="legend-square-exp-collapse">Expandable </li>
+                <li className="legend-square-consideration"> Test </li>
+                <li className="legend-square-red">Consideration </li>
+                <li className="legend-square-orange"> Diagnosis </li>
+              </ul>
+            </div>
+
+            {graph === "1" && graph1 != "null"
+              &&
+              <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
+                autoungrabify={true} userPanningEnabled={true} className="cyto"
+                cy={ref => cytoRef.current = ref}
+                elements={CytoscapeComponent.normalizeElements(graph1)} layout={layoutdagre}
+                stylesheet={cytoscapeStylesheet} />
+            }
+            {graph === "2" && graph2 != "null"
+              &&
+              <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
+                autoungrabify={true} userPanningEnabled={true} className="cyto"
+                cy={ref => cytoRef.current = ref}
+                elements={CytoscapeComponent.normalizeElements(graph2)} layout={layoutdagre}
+                stylesheet={cytoscapeStylesheet} />
+            }
+            {graph === "3" && graph3 != "null"
+              &&
+              <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
+                autoungrabify={true} userPanningEnabled={true} className="cyto"
+                cy={ref => cytoRef.current = ref}
+                elements={CytoscapeComponent.normalizeElements(graph3)} layout={layoutdagre}
+                stylesheet={cytoscapeStylesheet} />
+            }
+            {graph === "4" && graph4 != "null"
+              &&
+              <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
+                autoungrabify={true} userPanningEnabled={true} className="cyto"
+                cy={ref => cytoRef.current = ref}
+                elements={CytoscapeComponent.normalizeElements(graph4)} layout={layoutdagre}
+                stylesheet={cytoscapeStylesheet} />
+            }
+            {graph === "5" && graph5 != "null"
+              &&
+              <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
+                autoungrabify={true} userPanningEnabled={true} className="cyto"
+                cy={ref => cytoRef.current = ref}
+                elements={CytoscapeComponent.normalizeElements(graph5)} layout={layoutdagre}
+                stylesheet={cytoscapeStylesheet} />
+            }
+            {graph === "6" && graph6 != "null"
+              &&
+              <CytoscapeComponent minZoom={0.5} maxZoom={1.5}
+                autoungrabify={true} userPanningEnabled={true} className="cyto"
+                cy={ref => cytoRef.current = ref}
+                elements={CytoscapeComponent.normalizeElements(graph6)} layout={layoutdagre}
+                stylesheet={cytoscapeStylesheet} />
+            }
           </div>
         </div>
-      }
-    </div>
+      </div>
+    }
+  </div>
 
 
-  );
+);
 
 
 }

@@ -52,6 +52,7 @@ export const cytoscapeStylesheet = [
         "text-halign": "center",
         "text-valign": "center",
         "box-shadow": "10px 5px 5px red",
+        "font-family": 'Gill Sans'
 
 
 

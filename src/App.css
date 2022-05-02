@@ -9,18 +9,18 @@ body {
   display: block;
   position: relative;
   /* background-color: #e9ebf0; */
-  font-family: Helvetica, Arial;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
  }
 
 #root {
   height: 100%;
   position: relative;
   width: 100%;
-  --primary-clr: #E5E7E9;
-  --background-clr : #E5E7E9;
-  --graph-btns-clr : #2E86C1;
-  --graph-btns-disabled:#2874A6;
-  --primary-clr-textbox: #2E86C1
+  --primary-clr: #FFFFFF;
+  --background-clr : #FFFFFF;
+  --graph-btns-clr : #944f96;
+  --graph-btns-disabled:#944f96;
+  --primary-clr-textbox: #944f96;
 
 }
 
@@ -55,7 +55,7 @@ body {
 }
 
 .graph-box-right__open-note-button {
-  background-color: var(--primary-clr) !important;
+  background-color: var(--primary-clr-textbox) !important;
   margin-bottom: 2.5px !important;
   height: 2rem;
   width: 2rem;
@@ -132,6 +132,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
 }
 
 .cyto {
@@ -141,6 +142,7 @@ body {
 
 .graphBox-wrapper__clinical-notes__header {
   margin-bottom: 2rem;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
 }
 
 #clincalNotesTextField {
@@ -153,6 +155,11 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+}
+
+h5{
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
 }
 
 .collapsed-child { 
@@ -243,8 +250,9 @@ img {
 }
 
 .btn-class {
-  border: 1px solid white !important;
-  color: white !important;
+  border: 1px solid #944f96 !important;
+  color: #944f96 !important;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
   
   
 }
@@ -266,7 +274,7 @@ img {
 h1 {
   font-size: clamp(5rem, 3vw + 1rem, 5rem);
   position: relative;
-  font-family: "Source Code Pro", monospace;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
   position: relative;
   width: max-content;
   color:var(--primary-clr);
